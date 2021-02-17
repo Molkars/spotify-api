@@ -1,0 +1,2701 @@
+openapi: 3.0.0
+info:
+  description: |
+    Welcome to the _Spotify Web API_ specification. For more information about
+    how to use the API, check out the [Spotify's developer site](https://developer.spotify.com/web-api/).
+  version: v1
+  title: Spotify Web API
+tags:
+  - name: albums
+    description: Endpoints for working with Albums
+  - name: artists
+    description: Endpoints for working with Artists
+  - name: tracks
+    description: Endpoints for dealing with Tracks
+  - name: search
+    description: Endpoints for working with Searching
+  - name: me
+    description: Endpoints for working with the user identity
+  - name: users
+    description: Endpoints for working with Users
+  - name: browse
+    description: Endpoints for working with browsing
+  - name: following
+    description: Endpoints for working with following
+paths:
+  /albums:
+    get:
+      tags:
+        - albums
+      description: |
+        [Get Several Albums](https://developer.spotify.com/web-api/get-several-albums/)
+      operationId: get-albums-from-ids
+      parameters:
+        - name: ids
+          in: query
+          description: A comma-separated list of IDs
+          required: true
+          schema:
+            type: string
+        - name: market
+          in: query
+          description: The market (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/album'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string
+            Example:
+              examples:
+                response:
+                  value:
+                    status: 401
+                    message: Only valid bearer authentication supported
+      summary: Get Albums by their IDs
+  '/albums/{id}':
+    get:
+      tags:
+        - albums
+      description: |
+        [Get an Album](https://developer.spotify.com/web-api/get-album/)
+      operationId: get-album-from-id
+      parameters:
+        - name: id
+          in: path
+          description: The Spotify ID for the album
+          required: true
+          schema:
+            type: string
+        - name: market
+          in: query
+          description: The market (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/album'
+      summary: Get an Album from ID
+  '/albums/{id}/tracks':
+    get:
+      tags:
+        - albums
+      description: |
+        [Get an Album's Tracks](https://developer.spotify.com/web-api/get-albums-tracks/)
+      operationId: get-tracks-from-album-id
+      parameters:
+        - name: id
+          in: path
+          description: The Spotify ID for the album
+          required: true
+          schema:
+            type: string
+        - name: market
+          in: query
+          description: The market (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of items to return
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+            default: 20
+        - name: offset
+          in: query
+          description: The index of the first item to return
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/album-track-page'
+      summary: Get Tracks from an Album
+  /artists:
+    get:
+      tags:
+        - artists
+      description: |
+        [Get Several Artists](https://developer.spotify.com/web-api/get-several-artists/)
+      operationId: get-artists-from-ids
+      parameters:
+        - name: ids
+          in: query
+          description: A comma-separated list of IDs
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/image'
+      summary: Get Artists by IDs
+  '/artists/{id}':
+    get:
+      tags:
+        - artists
+      description: |
+        [Get an Artist](https://developer.spotify.com/web-api/get-artist/)
+      operationId: get-artist-from-id
+      parameters:
+        - name: id
+          in: path
+          description: The Spotify ID for the artist
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/artist'
+  '/artists/{id}/top-tracks':
+    get:
+      tags:
+        - artists
+      description: |
+        [Get an Artist's Top Tracks](https://developer.spotify.com/web-api/get-artists-top-tracks/)
+      operationId: get-top-trakcs-from-artist-id
+      parameters:
+        - name: id
+          in: path
+          description: The Spotify ID for the artist
+          required: true
+          schema:
+            type: string
+        - name: country
+          in: query
+          description: The country (an ISO 3166-1 alpha-2 country code)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+  '/artists/{id}/related-artists':
+    get:
+      tags:
+        - artists
+      description: |
+        [Get an Artist's Related Artists](https://developer.spotify.com/web-api/get-related-artists/)
+      operationId: get-related-artists-from-artist-id
+      parameters:
+        - name: id
+          in: path
+          description: The Spotify ID for the artist
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+  '/artists/{id}/albums':
+    get:
+      tags:
+        - artists
+      description: |
+        [Get an Artist's Albums](https://developer.spotify.com/web-api/get-artists-albums/)
+      operationId: get-albums-from-artist-id
+      parameters:
+        - name: id
+          in: path
+          description: The Spotify ID for the artist
+          required: true
+          schema:
+            type: string
+        - name: album_type
+          in: query
+          description: Filter by album types
+          required: false
+          schema:
+            type: string
+        - name: market
+          in: query
+          description: The market (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of items to return
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+            default: 20
+        - name: offset
+          in: query
+          description: The index of the first item to return
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/album-simple-page'
+  /tracks:
+    get:
+      tags:
+        - tracks
+      description: |
+        [Get Several Tracks](https://developer.spotify.com/web-api/get-several-tracks/)
+      operationId: get-tracks
+      parameters:
+        - name: ids
+          in: query
+          description: A comma-separated list of IDs
+          required: true
+          schema:
+            type: string
+        - name: market
+          in: query
+          description: The market (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+  '/tracks/{id}':
+    get:
+      tags:
+        - tracks
+      description: |
+        [Get a Track](https://developer.spotify.com/web-api/get-track/)
+      operationId: get-tracks-from-id
+      parameters:
+        - name: id
+          in: path
+          description: Spotify Track ID
+          required: true
+          schema:
+            type: string
+        - name: market
+          in: query
+          description: The market (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/track'
+  /search:
+    get:
+      tags:
+        - search
+      description: |
+        [Search for an Item](https://developer.spotify.com/web-api/search-item/)
+      operationId: search
+      parameters:
+        - name: q
+          in: query
+          description: 'The search query''s keywords (and optional field filters). The search is not case-sensitive: ''roadhouse'' will match ''Roadhouse'', ''roadHouse'', etc. Keywords will be matched in any order unless surrounded by quotes, thus q=roadhouse&20blues will match both ''Blues Roadhouse'' and ''Roadhouse of the Blues''. Quotation marks can be used to limit the match to a phrase: q=roadhouse&20blues will match ''My Roadhouse Blues'' but not ''Roadhouse of the Blues''. By default, results are returned when a match is found in any field of the target object type. Searches can be made more specific by specifying an album, artist or track field filter. For example q=album:gold%20artist:abba&type=album will search for albums with the text ''gold'' in the album name and the text ''abba'' in an artist name. Other possible field filters, depending on object types being searched, include year, genre, upc, and isrc. For example, q=damian%20genre:reggae-pop&type=artist. The asterisk (*) character can, with some limitations, be used as a wildcard (maximum: 2 per query). It will match a variable number of non-white-space characters. It cannot be used in a quoted phrase, in a field filter, or as the first character of the keyword string. Searching for playlists will return results matching the playlist''s name and/or description.'
+          required: true
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: 'A comma-separated list of item types to search across. Search results will include hits from all the specified item types; for example q=name:abacab&type=album,track will return both albums and tracks with "abacab" in their name.'
+          required: true
+          schema:
+            type: string
+        - name: market
+          in: query
+          description: 'The market (an ISO 3166-1 alpha-2 country code).  If given, only items with content playable in that market will be returned.'
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of items to return
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+            default: 20
+        - name: offset
+          in: query
+          description: The index of the first item to return
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/search'
+      summary: Search
+  /me:
+    get:
+      tags:
+        - me
+      description: |
+        [Get Current User's Profile](https://developer.spotify.com/web-api/get-current-users-profile/)
+      operationId: get-identity
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/current-user-profile'
+  /me/tracks:
+    get:
+      operationId: get-user-tracks
+      description: Hello
+      tags:
+        - me
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+    put:
+      operationId: put-user-tracks
+      tags:
+        - me
+      description: |
+        [Save Tracks for Current User](https://developer.spotify.com/web-api/save-tracks-user/)
+      parameters:
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+        - name: ids
+          in: query
+          description: A comma-separated list of IDs
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication:
+            - user-library-modify
+        - refreshable-user-authentication:
+            - user-read-private
+            - user-read-birthdate
+            - user-read-email
+    delete:
+      tags:
+        - me
+      description: |
+        [Remove Tracks for Current User](https://developer.spotify.com/web-api/remove-tracks-user/)
+      operationId: delete-user-tracks
+      parameters:
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+        - name: ids
+          in: query
+          description: A comma-separated list of IDs
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication:
+            - user-library-modify
+        - refreshable-user-authentication:
+            - user-read-private
+            - user-read-birthdate
+            - user-read-email
+  /me/tracks/contains:
+    get:
+      tags:
+        - me
+      description: |
+        [Check Current User's Saved Tracks](https://developer.spotify.com/web-api/check-users-saved-tracks/)
+      operationId: get-saved-tracks
+      parameters:
+        - name: ids
+          in: query
+          description: A comma-separated list of IDs
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: boolean
+                  description: 'True if the track is in user''s Your Music library, false otherwise'
+      security:
+        - refreshable-user-authentication:
+            - user-library-read
+        - refreshable-user-authentication:
+            - user-read-private
+            - user-read-birthdate
+            - user-read-email
+  '/users/{user_id}':
+    get:
+      tags:
+        - users
+      description: |
+        [Get a User's Profile](https://developer.spotify.com/web-api/get-users-profile/)
+      operationId: get-user-from-id
+      parameters:
+        - name: user_id
+          in: path
+          description: The user's Spotify user ID.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-profile'
+  '/users/{user_id}/playlists':
+    get:
+      tags:
+        - users
+      description: |
+        [Get a List of a User's Playlists](https://developer.spotify.com/web-api/get-list-users-playlists/)
+      operationId: get-playlists-from-user-id
+      parameters:
+        - name: user_id
+          in: path
+          description: The user's Spotify user ID.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of items to return
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+            default: 20
+        - name: offset
+          in: query
+          description: The index of the first item to return
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/playlist-simple-page'
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication:
+            - playlist-read-private
+            - playlist-read-collaborative
+    post:
+      tags:
+        - users
+      description: |
+        [Create a Playlist](https://developer.spotify.com/web-api/create-playlist/)
+      operationId: POST_users-user_id-playlists
+      parameters:
+        - name: user_id
+          in: path
+          description: The user's Spotify user ID.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              example: Can not resolve examples/post-playlist.json
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/playlist'
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication:
+            - playlist-modify-public
+            - playlist-modify-private
+  '/users/{user_id}/playlists/{playlist_id}':
+    get:
+      tags:
+        - users
+      description: |
+        [Get a Playlist](https://developer.spotify.com/web-api/get-playlist/)
+      operationId: get-playlist-from-user-playlist-id
+      parameters:
+        - name: playlist_id
+          in: path
+          description: The Spotify playlist ID.
+          required: true
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          description: The user's Spotify user ID.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+        - name: market
+          in: query
+          description: The market (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: A comma-separated list of fields to filter query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/playlist'
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication: []
+    put:
+      tags:
+        - users
+      description: |
+        [Change a Playlist's Details](https://developer.spotify.com/web-api/change-playlist-details/)
+      operationId: PUT_users-user_id-playlists-playlist_id
+      parameters:
+        - name: playlist_id
+          in: path
+          description: The Spotify playlist ID.
+          required: true
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          description: The user's Spotify user ID.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              example: Can not resolve examples/put-playlist.json
+      responses:
+        '200':
+          description: ''
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication:
+            - playlist-modify-public
+            - playlist-modify-private
+  '/users/{user_id}/playlists/{playlist_id}/tracks':
+    get:
+      tags:
+        - users
+      description: |
+        [Get a Playlist's Tracks](https://developer.spotify.com/web-api/get-playlists-tracks/)
+      operationId: get-track-from-user-playlist-id
+      parameters:
+        - name: playlist_id
+          in: path
+          description: The Spotify playlist ID.
+          required: true
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          description: The user's Spotify user ID.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+        - name: market
+          in: query
+          description: The market (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: A comma-separated list of fields to filter query
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of items to return
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+            default: 20
+        - name: offset
+          in: query
+          description: The index of the first item to return
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/playlist-track-page'
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication: []
+    post:
+      tags:
+        - users
+      description: |
+        [Add Tracks to a Playlist](https://developer.spotify.com/web-api/add-tracks-to-playlist/)
+      operationId: POST_users-user_id-playlists-playlist_id-tracks
+      parameters:
+        - name: playlist_id
+          in: path
+          description: The Spotify playlist ID.
+          required: true
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          description: The user's Spotify user ID.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+        - name: position
+          in: query
+          description: 'The position to insert the tracks, a zero-based index'
+          required: false
+          schema:
+            type: integer
+        - name: uris
+          in: query
+          description: A comma-separated list of Spotify track URIs to add. A maximum of 100 tracks can be added in one request.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/playlist-snapshot'
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication:
+            - playlist-modify-public
+            - playlist-modify-private
+    put:
+      tags:
+        - users
+      description: |
+        [Reorder or replace a Playlist's Tracks](https://developer.spotify.com/web-api/reorder-playlists-tracks/)
+      operationId: PUT_users-user_id-playlists-playlist_id-tracks
+      parameters:
+        - name: playlist_id
+          in: path
+          description: The Spotify playlist ID.
+          required: true
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          description: The user's Spotify user ID.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              example: Can not resolve examples/put-playlist-tracks.json
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/playlist-snapshot'
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication:
+            - playlist-modify-public
+            - playlist-modify-private
+    delete:
+      tags:
+        - users
+      description: |
+        [Remove Tracks from a Playlist](https://developer.spotify.com/web-api/remove-tracks-playlist/)
+      operationId: DELETE_users-user_id-playlists-playlist_id-tracks
+      parameters:
+        - name: playlist_id
+          in: path
+          description: The Spotify playlist ID.
+          required: true
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          description: The user's Spotify user ID.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              example: Can not resolve examples/delete-playlist-tracks.json
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/playlist-snapshot'
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication:
+            - playlist-modify-public
+            - playlist-modify-private
+  '/users/{user_id}/playlists/{playlist_id}/followers':
+    put:
+      tags:
+        - users
+      description: |
+        [Follow a Playlist](https://developer.spotify.com/web-api/follow-playlist/)
+      operationId: get-followers-from-user-playlist-id
+      parameters:
+        - name: playlist_id
+          in: path
+          description: The Spotify playlist ID.
+          required: true
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          description: The user's Spotify user ID.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+      responses:
+        '200':
+          description: ''
+      security:
+        - refreshable-user-authentication:
+            - playlist-modify-public
+            - playlist-modify-private
+    delete:
+      tags:
+        - users
+      description: |
+        [Unfollow a Playlist](https://developer.spotify.com/web-api/unfollow-playlist/)
+      operationId: DELETE_users-user_id-playlists-playlist_id-followers
+      parameters:
+        - name: playlist_id
+          in: path
+          description: The Spotify playlist ID.
+          required: true
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          description: The user's Spotify user ID.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      security:
+        - refreshable-user-authentication:
+            - playlist-modify-public
+            - playlist-modify-private
+  '/users/{user_id}/playlists/{playlist_id}/followers/contains':
+    get:
+      tags:
+        - users
+      description: |
+        [Check if Users Follow a Playlist](https://developer.spotify.com/web-api/check-user-following-playlist/)
+      operationId: check-if-user-follows-playlist
+      parameters:
+        - name: playlist_id
+          in: path
+          description: The Spotify playlist ID.
+          required: true
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          description: The user's Spotify user ID.
+          required: true
+          schema:
+            type: string
+        - name: ids
+          in: query
+          description: A comma-separated list of users ids
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: boolean
+                  description: 'True if the user follows the playlist, false otherwise'
+      security:
+        - refreshable-user-authentication: []
+  /browse/new-releases:
+    get:
+      tags:
+        - browse
+      description: |
+        [Get a List of New Releases](https://developer.spotify.com/web-api/get-list-new-releases/)
+      operationId: get-new-releases
+      parameters:
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+        - name: country
+          in: query
+          description: The country (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of items to return
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+            default: 20
+        - name: offset
+          in: query
+          description: The index of the first item to return
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/album-simple-page'
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication: []
+  /browse/featured-playlists:
+    get:
+      tags:
+        - browse
+      description: |
+        [Get a List of Featured Playlists](https://developer.spotify.com/web-api/get-list-featured-playlists/)
+      operationId: get-featured-playlists
+      parameters:
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+        - name: country
+          in: query
+          description: The country (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+        - name: locale
+          in: query
+          description: |
+            The desired language, consisting of an ISO 639 language code and an ISO 3166-1 alpha-2 country code, joined by an underscore. For example: es_MX, meaning "Spanish (Mexico)".
+          required: false
+          schema:
+            type: string
+        - name: timestamp
+          in: query
+          description: |
+            A timestamp in ISO 8601 format (yyyy-MM-dd'T'HH:mm:ss) with the user's local time to get results tailored to a specific date and time in the day. If not provided, it defaults to the current UTC time. Example: "2014-10-23T09:00:00" for a user whose local time is 9AM.
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of items to return
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+            default: 20
+        - name: offset
+          in: query
+          description: The index of the first item to return
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/playlist-simple-page'
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication: []
+  /browse/categories:
+    get:
+      tags:
+        - browse
+      description: |
+        [Get a List of Browse Categories](https://developer.spotify.com/web-api/get-list-categories/)
+      operationId: get-browsable-categories
+      parameters:
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+        - name: country
+          in: query
+          description: The country (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+        - name: locale
+          in: query
+          description: |
+            The desired language, consisting of an ISO 639 language code and an ISO 3166-1 alpha-2 country code, joined by an underscore. For example: es_MX, meaning "Spanish (Mexico)".
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of items to return
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+            default: 20
+        - name: offset
+          in: query
+          description: The index of the first item to return
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/category-page'
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication: []
+  '/browse/categories/{category_id}':
+    get:
+      tags:
+        - browse
+      description: |
+        [Get a Single Browse Category](https://developer.spotify.com/web-api/get-category/)
+      operationId: get-browsable-category-from-id
+      parameters:
+        - name: category_id
+          in: path
+          description: The Spotify ID of the category you wish to fetch.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+        - name: country
+          in: query
+          description: The country (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+        - name: locale
+          in: query
+          description: |
+            The desired language, consisting of an ISO 639 language code and an ISO 3166-1 alpha-2 country code, joined by an underscore. For example: es_MX, meaning "Spanish (Mexico)".
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/category'
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication: []
+  '/browse/categories/{category_id}/playlists':
+    get:
+      tags:
+        - browse
+      description: |
+        [Get a Category's playlists](https://developer.spotify.com/web-api/get-categorys-playlists/)
+      operationId: get-playlists-from-browsable-category-id
+      parameters:
+        - name: category_id
+          in: path
+          description: The Spotify ID of the category you wish to fetch.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: It is used to set specified media type.
+          required: true
+          schema:
+            type: string
+        - name: country
+          in: query
+          description: The country (an ISO 3166-1 alpha-2 country code)
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of items to return
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+            default: 20
+        - name: offset
+          in: query
+          description: The index of the first item to return
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: OK
+        '429':
+          description: |
+            API rate limit exceeded. See http://developer.spotify.com/web-api/user-guide/#rate-limiting for details.
+      security:
+        - refreshable-user-authentication: []
+  /me/following:
+    get:
+      tags:
+        - me
+        - following
+      description: |
+        [Get User's Followed Artists](https://developer.spotify.com/web-api/get-followed-artists/)
+      operationId: get-followed-artists
+      parameters:
+        - name: type
+          in: query
+          description: 'The ID type, currently only artist is supported.'
+          required: true
+          schema:
+            type: string
+            enum:
+              - artist
+        - name: limit
+          in: query
+          description: The maximum number of items to return
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+            default: 20
+        - name: after
+          in: query
+          description: The last artist ID retrieved from the previous request.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-followed'
+      security:
+        - refreshable-user-authentication:
+            - user-follow-read
+    put:
+      tags:
+        - me
+        - following
+      description: |
+        [Follow Artists or Users](https://developer.spotify.com/web-api/follow-artists-users/)
+      operationId: PUT_me-following
+      parameters:
+        - name: type
+          in: query
+          description: The type to follow.
+          required: true
+          schema:
+            type: string
+            enum:
+              - artist
+              - user
+        - name: ids
+          in: query
+          description: A comma-separated list of the artists or users ids
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: ''
+      security:
+        - refreshable-user-authentication:
+            - user-follow-modify
+    delete:
+      tags:
+        - me
+        - following
+      description: |
+        [Unfollow Artists or Users](https://developer.spotify.com/web-api/unfollow-artists-users/)
+      operationId: DELETE_me-following
+      parameters:
+        - name: type
+          in: query
+          description: The type to unfollow.
+          required: true
+          schema:
+            type: string
+            enum:
+              - artist
+              - user
+        - name: ids
+          in: query
+          description: A comma-separated list of the artists or users ids
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: ''
+      security:
+        - refreshable-user-authentication:
+            - user-follow-modify
+  /me/following/contains:
+    get:
+      tags:
+        - me
+        - following
+      description: |
+        [Check if Current User Follows Artists or Users](https://developer.spotify.com/web-api/check-current-user-follows/)
+      operationId: follows-contains
+      parameters:
+        - name: type
+          in: query
+          description: The type to follow.
+          required: true
+          schema:
+            type: string
+            enum:
+              - artist
+              - user
+        - name: ids
+          in: query
+          description: A comma-separated string of the artists or users ids.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: boolean
+                  description: 'True if the user follows the artist/user, false otherwise'
+      security:
+        - refreshable-user-authentication:
+            - user-follow-read
+  /swap:
+    get:
+      summary: Swap Token
+      description: Swaps a code for an access token and a refresh token.
+      tags: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              description: application/json
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: |
+                      Access token received from Spotify account service
+                  expires_in:
+                    type: string
+                    description: The time period (in seconds) for which the access token is valid. Returned from the Spotify account service.
+                  refresh_token:
+                    type: string
+                    description: The refresh token returned from the Spotify account service. It should not return the actual refresh token but a reference to the token or an encrypted version of the token. Encryption solution is shown in the ruby example.
+            Respones Example:
+              examples:
+                response:
+                  value:
+                    access_token: NgAagA...Um_SHo
+                    expires_in: '3600'
+                    refresh_token: NgCXRK...MzYjw
+      operationId: swap-token
+      parameters:
+        - in: header
+          name: Content-Type
+          description: application/x-www-form-urlencoded
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+  /refresh:
+    get:
+      summary: Refresh Token
+      description: Uses the refresh token to get a new access token.
+      tags: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              description: application/json
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: Access token received from Spotify account service.
+                  expires_in:
+                    type: string
+                    description: The time period (in seconds) for which the access token is valid. Returned from the Spotify account service.
+            Response Example:
+              examples:
+                response:
+                  value:
+                    access_token: NgAagA...Um_SHo
+                    expires_in: '3600'
+      operationId: refresh-token
+      parameters:
+        - in: header
+          name: Content-Type
+          description: application/x-www-form-urlencoded
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  description: The refresh_token value previously returned from the token swap endpoint.
+x-basePath: '/{version}'
+servers:
+  - url: 'https://api.spotify.com/v1'
+components:
+  parameters:
+    trait_filterable_fields:
+      name: fields
+      in: query
+      description: A comma-separated list of fields to filter query
+      required: true
+      schema:
+        type: string
+    trait_paged_limit:
+      name: limit
+      in: query
+      description: The maximum number of items to return
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 50
+        default: 20
+    trait_paged_offset:
+      name: offset
+      in: query
+      description: The index of the first item to return
+      required: false
+      schema:
+        type: integer
+        default: 0
+  securitySchemes:
+    refreshable-user-authentication:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'https://accounts.authorize.com/'
+          scopes:
+            user-library-read: ''
+            user-library-modify: ''
+            user-read-private: ''
+            user-read-birthdate: ''
+            user-read-email: ''
+            user-follow-read: ''
+            user-follow-modify: ''
+            playlist-read-collaborative: ''
+            playlist-read-private: ''
+            playlist-modify-public: ''
+            playlist-modify-private: ''
+  schemas:
+    album:
+      type: object
+      title: Album
+      properties:
+        album_type:
+          type: string
+          enum:
+            - album
+            - single
+            - compilation
+          description: 'The type of the album: album, single, or compilation.'
+        artists:
+          type: array
+          description: The artists of the album. Each artist object includes a link in href to more detailed information about the artist.
+          items:
+            $ref: '#/components/schemas/artist'
+        available_markets:
+          type: array
+          description: 'The markets in which the album is available: ISO 3166-1 alpha-2 country codes. Note that an album is considered available in a market when at least 1 of its tracks is available in that market.'
+          items:
+            type: string
+        copyrights:
+          type: array
+          description: The copyright statements of the album.
+          items:
+            $ref: '#/components/schemas/copyright'
+        external_ids:
+          $ref: '#/components/schemas/external-id'
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        genres:
+          type: array
+          description: 'A list of the genres used to classify the album. For example: “Prog Rock” , “Post-Grunge”. (If not yet classified, the array is empty.)'
+          items:
+            type: string
+        href:
+          type: string
+          description: A link to the Web API endpoint providing full details of the album.
+        id:
+          type: string
+          description: The Spotify ID for the album.
+        images:
+          type: array
+          description: 'The cover art for the album in various sizes, widest first.'
+          items:
+            $ref: '#/components/schemas/image'
+        label:
+          type: string
+          description: The label for the album.
+        name:
+          type: string
+          description: 'The name of the album. In case of an album takedown, the value may be an empty string.'
+        popularity:
+          type: integer
+          description: 'The popularity of the album. The value will be between 0 and 100, with 100 being the most popular. The popularity is calculated from the popularity of the album’s individual tracks.'
+        release_date:
+          type: string
+          pattern: '^([0-9]{4})(-[0-9]{2}){0,2}$'
+          description: 'The date the album was first released, for example “1981-12-15”. Depending on the precision, it might be shown as “1981” or “1981-12”.'
+        release_data_precision:
+          type: string
+          enum:
+            - year
+            - month
+            - day
+          description: 'The precision with which release_date value is known: “year” , “month” , or “day”.'
+        restrictions:
+          $ref: '#/components/schemas/album-restriction'
+        tracks:
+          type: array
+          description: The tracks of the album.
+          items:
+            $ref: '#/components/schemas/track-simple'
+        type:
+          type: string
+          enum:
+            - album
+          description: 'The object type: “album”'
+        uri:
+          type: string
+          description: The Spotify URI for the album.
+    simplified-album:
+      type: object
+      properties:
+        album_group:
+          type: string
+        album_type:
+          type: string
+        artists:
+          type: array
+          items:
+            $ref: '#/components/schemas/simplified-artist'
+        available_markets:
+          type: array
+          items:
+            type: string
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        href:
+          type: string
+        id:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/image'
+        name:
+          type: string
+        release_date:
+          type: string
+        release_data_precision:
+          type: string
+        restrictions:
+          $ref: '#/components/schemas/album-restriction'
+        type:
+          type: string
+          enum:
+            - album
+        uri:
+          type: string
+    artist:
+      type: object
+      properties:
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        followers:
+          type: array
+          description: Information about the followers of the artist.
+          items:
+            $ref: '#/components/schemas/followers'
+        genres:
+          type: array
+          description: 'A list of the genres the artist is associated with. For example: "Prog Rock" , "Post-Grunge". (If not yet classified, the array is empty.)'
+          items:
+            type: string
+        href:
+          type: string
+          description: A link to the Web API endpoint providing full details of the artist.
+        id:
+          type: string
+          description: The Spotify ID for the artist.
+        images:
+          type: array
+          description: 'Images of the artist in various sizes, widest first.'
+          items:
+            $ref: '#/components/schemas/image'
+        name:
+          type: string
+          description: The name of the artist.
+        popularity:
+          type: integer
+          description: 'The popularity of the artist. The value will be between 0 and 100, with 100 being the most popular. The artist’s popularity is calculated from the popularity of all the artist’s tracks.'
+        type:
+          type: string
+          enum:
+            - artist
+          description: 'The object type: "artist"'
+        uri:
+          type: string
+          description: The Spotify URI for the artist.
+    simplified-artist:
+      type: object
+      properties:
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        href:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+            - artist
+        uri:
+          type: string
+    category:
+      type: object
+      properties:
+        href:
+          type: string
+          description: A link to the Web API endpoint returning full details of the category.
+        icons:
+          type: array
+          description: 'The category icon, in various sizes.'
+          items:
+            $ref: '#/components/schemas/image'
+        id:
+          type: string
+          description: The Spotify category ID of the category.
+        name:
+          type: string
+          description: The name of the category.
+    image:
+      type: object
+      properties:
+        height:
+          type: integer
+        url:
+          type: string
+        width:
+          type: integer
+    playlist:
+      type: object
+      properties:
+        collaborative:
+          type: boolean
+        description:
+          type: string
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        followers:
+          $ref: '#/components/schemas/followers'
+        href:
+          type: string
+        id:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/image'
+        name:
+          type: string
+        owner:
+          $ref: '#/components/schemas/public-user'
+        public:
+          type: boolean
+        snapshot_id:
+          type: string
+        tracks:
+          $ref: '#/components/schemas/playlist-track'
+        type:
+          type: string
+        uri:
+          type: string
+    playlist-track:
+      type: object
+      properties:
+        added_at:
+          type: string
+          format: date-time
+        added_by:
+          $ref: '#/components/schemas/public-user'
+        is_local:
+          type: boolean
+        track:
+          oneOf:
+            - $ref: '#/components/schemas/track'
+            - $ref: '#/components/schemas/episode'
+    track:
+      type: object
+      properties:
+        album:
+          $ref: '#/components/schemas/simplified-album'
+        artists:
+          type: array
+          items:
+            $ref: '#/components/schemas/artist'
+        available_markets:
+          type: array
+          items:
+            type: string
+        disc_number:
+          type: integer
+        duration_ms:
+          type: integer
+        explicit:
+          type: boolean
+        external_ids:
+          $ref: ''
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        href:
+          type: string
+        id:
+          type: string
+        is_local:
+          type: boolean
+        is_playable:
+          type: boolean
+        linked_from:
+          type: object
+        name:
+          type: string
+        popularity:
+          type: integer
+        preview_url:
+          type: string
+        restrictions:
+          $ref: '#/components/schemas/track-restriction'
+        track_number:
+          type: integer
+        type:
+          type: string
+          enum:
+            - track
+        uri:
+          type: string
+    followers:
+      type: object
+      properties:
+        href:
+          type: string
+        total:
+          type: integer
+    saved-track:
+      type: object
+      properties:
+        added_at:
+          type: string
+          format: date-time
+        track:
+          $ref: '#/components/schemas/track'
+    copyright:
+      title: copyright
+      type: object
+      properties:
+        text:
+          type: string
+          description: The copyright text for this content.
+        type:
+          type: string
+          enum:
+            - C
+            - P
+          description: 'The type of copyright: C = the copyright, P = the sound recording (performance) copyright.'
+    external-id:
+      title: external-id
+      type: object
+      properties:
+        ean:
+          type: string
+          pattern: '(?<=\s)\d{13}(?=\s)'
+        isrc:
+          type: string
+        upc:
+          type: string
+      description: ''
+    external-url:
+      title: external-url
+      type: object
+      properties:
+        spotify:
+          type: string
+      description: Known external urls
+    album-restriction:
+      title: album-restriction
+      type: object
+      properties:
+        reason:
+          type: string
+          enum:
+            - market
+            - product
+            - explicit
+          description: |-
+            The reason for the restriction. Supported values:
+
+                * market - The content item is not available in the given market.
+                * product - The content item is not available for the user’s subscription type.
+                * explicit - The content item is explicit and the user’s account is set to not play explicit content.
+                Additional reasons may be added in the future. Note: If you use this field, make sure that your application safely handles unknown values.
+    audio-features:
+      title: audio-features
+      type: object
+      description: ''
+      properties:
+        acousticness:
+          type: number
+          description: A confidence measure from 0.0 to 1.0 of whether the track is acoustic. 1.0 represents high confidence the track is acoustic.
+        analysis_url:
+          type: string
+          description: An HTTP URL to access the full audio analysis of this track. An access token is required to access this data.
+        danceability:
+          type: number
+          description: 'Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 1.0 is most danceable.'
+        duration_ms:
+          type: integer
+          description: The duration of the track in milliseconds.
+        energy:
+          type: number
+          description: 'Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy. For example, death metal has high energy, while a Bach prelude scores low on the scale. Perceptual features contributing to this attribute include dynamic range, perceived loudness, timbre, onset rate, and general entropy.'
+        id:
+          type: string
+          description: The Spotify ID for the track.
+        instrumentalness:
+          type: number
+          description: 'Predicts whether a track contains no vocals. “Ooh” and “aah” sounds are treated as instrumental in this context. Rap or spoken word tracks are clearly “vocal”. The closer the instrumentalness value is to 1.0, the greater likelihood the track contains no vocal content. Values above 0.5 are intended to represent instrumental tracks, but confidence is higher as the value approaches 1.0.'
+        key:
+          type: integer
+          enum:
+            - 0
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+            - 10
+            - 11
+            - 12
+          description: 'The key the track is in. Integers map to pitches using standard Pitch Class notation . E.g. 0 = C, 1 = C♯/D♭, 2 = D, and so on.'
+        liveness:
+          type: number
+          description: Detects the presence of an audience in the recording. Higher liveness values represent an increased probability that the track was performed live. A value above 0.8 provides strong likelihood that the track is live.
+        loudness:
+          type: number
+          description: The overall loudness of a track in decibels (dB). Loudness values are averaged across the entire track and are useful for comparing relative loudness of tracks. Loudness is the quality of a sound that is the primary psychological correlate of physical strength (amplitude). Values typical range between -60 and 0 db.
+        mode:
+          type: integer
+          enum:
+            - 0
+            - 1
+          description: 'Mode indicates the modality (major or minor) of a track, the type of scale from which its melodic content is derived. Major is represented by 1 and minor is 0.'
+        speechiness:
+          type: number
+          description: 'Speechiness detects the presence of spoken words in a track. The more exclusively speech-like the recording (e.g. talk show, audio book, poetry), the closer to 1.0 the attribute value. Values above 0.66 describe tracks that are probably made entirely of spoken words. Values between 0.33 and 0.66 describe tracks that may contain both music and speech, either in sections or layered, including such cases as rap music. Values below 0.33 most likely represent music and other non-speech-like tracks.'
+        tempo:
+          type: number
+          description: 'The overall estimated tempo of a track in beats per minute (BPM). In musical terminology, tempo is the speed or pace of a given piece and derives directly from the average beat duration.'
+        time_signature:
+          type: integer
+          description: An estimated overall time signature of a track. The time signature (meter) is a notational convention to specify how many beats are in each bar (or measure).
+        track_href:
+          type: string
+          description: A link to the Web API endpoint providing full details of the track.
+        type:
+          type: string
+          enum:
+            - audio_features
+          description: 'The object type: “audio_features”'
+        uri:
+          type: string
+          description: The Spotify URI for the track.
+        valence:
+          type: number
+          description: 'A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).'
+    context:
+      title: context
+      type: object
+      properties:
+        external_urls:
+          type: string
+          description: External URLs for this context.
+        href:
+          type: string
+          description: A link to the Web API endpoint providing full details of the track.
+        type:
+          type: string
+          description: 'The object type, e.g. “artist”, “playlist”, “album”, “show”.'
+          enum:
+            - artist
+            - playlist
+            - album
+            - show
+        uri:
+          type: string
+          description: The Spotify URI for the context.
+    currently-playing-context:
+      title: currently-playing-context
+      type: object
+      properties:
+        actions:
+          $ref: '#/components/schemas/disallows'
+        context:
+          $ref: '#/components/schemas/context'
+        currently_playing_type:
+          type: string
+          enum:
+            - track
+            - episode
+            - ad
+            - unknown
+          description: 'The object type of the currently playing item. Can be one of track, episode, ad or unknown.'
+        device:
+          $ref: '#/components/schemas/device'
+        item:
+          anyOf:
+            - $ref: '#/components/schemas/track'
+            - $ref: '#/components/schemas/episode'
+          description: The currently playing track or episode. Can be null.
+        progress_ms:
+          type: integer
+          description: Progress into the currently playing track or episode. Can be null.
+        repeat_state:
+          type: string
+          enum:
+            - 'off'
+            - track
+            - context
+          description: 'off, track, context'
+        shuffle_state:
+          type: string
+          description: If shuffle is on or off.
+        timestamp:
+          type: string
+          format: date-time
+          description: Unix Millisecond Timestamp when data was fetched.
+        is_playing:
+          type:
+            - string
+            - boolean
+          description: 'If something is currently playing, return true.'
+    disallows:
+      title: disallows
+      type: object
+      properties:
+        interrupting_playback:
+          type: string
+          description: Interrupting playback. Optional field.
+        pausing:
+          type: string
+          description: Pausing. Optional field.
+        resuming:
+          type: string
+          description: Resuming. Optional field.
+        seeking:
+          type: string
+          description: Seeking playback location. Optional field.
+        skipping_next:
+          type: string
+          description: Skipping to the next context. Optional field.
+        skipping_prev:
+          type: string
+          description: Skipping to the previous context. Optional field.
+        toggling_repeat_context:
+          type: string
+          description: Toggling repeat context flag. Optional field.
+        toggling_repeat_track:
+          type: string
+          description: Toggling repeat track flag. Optional field.
+        toggling_shuffle:
+          type: string
+          description: Toggling shuffle flag. Optional field.
+        transferring_playback:
+          type: string
+          description: Transfering playback between devices. Optional field.
+    device:
+      title: device
+      type: object
+      properties:
+        id:
+          type: string
+          description: The device ID. This may be null.
+        is_active:
+          type: boolean
+          description: If this device is the currently active device.
+        is_private_session:
+          type: boolean
+          description: If this device is currently in a private session.
+        is_restricted:
+          type: boolean
+          description: Whether controlling this device is restricted. At present if this is “true” then no Web API commands will be accepted by this device.
+        name:
+          type: string
+          description: The name of the device.
+        type:
+          type: string
+          enum:
+            - computer
+            - smartphone
+            - speaker
+          description: 'Device type, such as “computer”, “smartphone” or “speaker”.'
+        volume_percent:
+          type: string
+          description: The current volume in percent. This may be null.
+    episode:
+      title: episode
+      type: object
+      properties:
+        audio_preview_url:
+          type: string
+        description:
+          type: string
+        duration_ms:
+          type: integer
+        explicit:
+          type: boolean
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        href:
+          type: string
+        id:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/image'
+        is_externally_hosted:
+          type: boolean
+        is_playable:
+          type: boolean
+        language:
+          type: string
+        languages:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+        release_date:
+          type: string
+        release_data_precision:
+          type: string
+        resume_point:
+          $ref: '#/components/schemas/resume-point'
+        show:
+          $ref: '#/components/schemas/show-simple'
+        type:
+          type: string
+        uri:
+          type: string
+    currently-playing:
+      title: currently-playing
+      type: object
+      properties:
+        context:
+          $ref: '#/components/schemas/context'
+        currently_playing_type:
+          type: string
+          description: 'The object type of the currently playing item. Can be one of track, episode, ad or unknown.'
+          enum:
+            - track
+            - episode
+            - ad
+            - unknown
+        is_playing:
+          type: boolean
+        item:
+          oneOf:
+            - $ref: '#/components/schemas/track'
+            - $ref: '#/components/schemas/episode'
+        progress_ms:
+          type: integer
+        timestamp:
+          type: string
+          format: time
+    cursor:
+      title: cursor
+      type: object
+      properties:
+        after:
+          type: string
+          description: The cursor to use as key to find the next page of items.
+    cursor-paging:
+      title: cursor-paging
+      type: object
+      properties:
+        cursors:
+          $ref: '#/components/schemas/cursor'
+        href:
+          type: string
+          description: A link to the Web API endpoint returning the full result of the request.
+        items:
+          type: array
+          description: The requested data.
+          items:
+            type: object
+        limit:
+          type: integer
+          description: The maximum number of items in the response (as set in the query or by default).
+        next:
+          type: string
+          description: URL to the next page of items. ( null if none)
+        total:
+          type: integer
+          description: The total number of items available to return.
+    devices:
+      title: devices
+      type: object
+      properties:
+        devices:
+          type: array
+          description: A list of 0..n Device objects
+          items:
+            $ref: '#/components/schemas/device'
+    error:
+      title: error
+      type: object
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+    resume-point:
+      title: resume-point
+      type: object
+      properties:
+        fully_played:
+          type: boolean
+        resume_position_ms:
+          type: integer
+    explicit-content-settings:
+      title: explicit-content-settings
+      type: object
+      properties:
+        filter_enabled:
+          type: boolean
+        filter_locked:
+          type: boolean
+    linked-track:
+      title: linked-track
+      type: object
+      properties:
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        href:
+          type: string
+        id:
+          type: string
+        type:
+          type: string
+        uri:
+          type: string
+    paging:
+      title: paging
+      type: object
+      properties:
+        href:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+        limit:
+          type: integer
+        next:
+          type: string
+        offset:
+          type: integer
+        previous:
+          type: string
+        total:
+          type: integer
+    play-history:
+      title: play-history
+      type: object
+      properties:
+        context:
+          $ref: '#/components/schemas/context'
+        played_at:
+          type: string
+          format: time
+        track:
+          $ref: '#/components/schemas/track-simple'
+    player-error:
+      title: player-error
+      type: object
+      properties:
+        message:
+          type: string
+        reason:
+          type: string
+          enum:
+            - NO_PREV_TRACK
+            - NO_NEXT_TRACK
+            - NO_SPECIFIC_TRACK
+            - ALREADY_PAUSED
+            - NOT_PAUSED
+            - NOT_PLAYING_LOCALLY
+            - NOT_PLAYING_TRACK
+            - NOT_PLAYING_CONTEXT
+            - ENDLESS_CONTEXT
+            - CONTEXT_DISALLOW
+            - ALREADY_PLAYING
+            - RATE_LIMITED
+            - REMOVE_CONTROL_DISALLOW
+            - DEVICE_NOT_CONTROLLABLE
+            - VOLUME_CONTROL_DISALLOW
+            - NO_ACTIVE_DEVICE
+            - PREMIUM_REQUIRED
+            - UNKNOWN
+        status:
+          type: integer
+    public-user:
+      title: public-user
+      type: object
+      properties:
+        display_name:
+          type: string
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        followers:
+          $ref: '#/components/schemas/followers'
+        href:
+          type: string
+        id:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/image'
+        type:
+          type: string
+        uri:
+          type: string
+    playlist-tracks-ref:
+      title: playlist-tracks-ref
+      type: object
+      properties:
+        href:
+          type: string
+        total:
+          type: integer
+    private-user:
+      title: private-user
+      type: object
+      properties:
+        country:
+          type: string
+        display_name:
+          type: string
+        email:
+          type: string
+        explicit_content:
+          $ref: '#/components/schemas/explicit-content-settings'
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        followers:
+          $ref: '#/components/schemas/followers'
+        href:
+          type: string
+        id:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/image'
+        product:
+          type: string
+        type:
+          type: string
+        uri:
+          type: string
+    recommendation-seed:
+      title: recommendation-seed
+      type: object
+      properties:
+        afterFilteringSize:
+          type: integer
+        afterRelinkingSize:
+          type: integer
+        href:
+          type: string
+        id:
+          type: string
+        intialPoolSize:
+          type: integer
+        type:
+          type: string
+    recommendations:
+      title: recommendations
+      type: object
+      properties:
+        seeds:
+          type: array
+          items:
+            $ref: '#/components/schemas/recommendation-seed'
+        tracks:
+          type: array
+          items:
+            $ref: '#/components/schemas/track-simple'
+    saved-album:
+      title: saved-album
+      type: object
+      properties:
+        added_at:
+          type: string
+          format: date-time
+        album:
+          $ref: '#/components/schemas/album'
+    saved-show:
+      title: saved-show
+      type: object
+      properties:
+        added_at:
+          type: string
+          format: date-time
+        show:
+          $ref: '#/components/schemas/simplified-show'
+    show:
+      title: show
+      type: object
+      description: ''
+      properties:
+        available_markets:
+          type: array
+          items:
+            type: string
+        copyrights:
+          type: array
+          items:
+            $ref: '#/components/schemas/copyright'
+        description:
+          type: string
+        episodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/simplified-episode'
+        explicit:
+          type: boolean
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        href:
+          type: string
+        id:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/image'
+        is_externally_hosted:
+          type: boolean
+        languages:
+          type: array
+          items:
+            type: string
+        media_type:
+          type: string
+        name:
+          type: string
+        publisher:
+          type: string
+        type:
+          type: string
+        uri:
+          type: string
+    simplified-episode:
+      title: simplified-episode
+      type: object
+      properties:
+        audio_preview_url:
+          type: string
+        description:
+          type: string
+        duration_ms:
+          type: integer
+        explicit:
+          type: boolean
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        href:
+          type: string
+        id:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/image'
+        is_externally_hosted:
+          type: boolean
+        is_playable:
+          type: boolean
+        language:
+          type: string
+        languages:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+        release_date:
+          type: string
+        release_data_precision:
+          type: string
+        resume_point:
+          type: string
+        type:
+          type: string
+        uri:
+          type: string
+    simplified-playlist:
+      title: simplified-playlist
+      type: object
+      properties:
+        collaborative:
+          type: boolean
+        description:
+          type: string
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        href:
+          type: string
+        id:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/image'
+        name:
+          type: string
+        owner:
+          $ref: '#/components/schemas/public-user'
+        public:
+          type: boolean
+        snapshot_id:
+          type: string
+        tracks:
+          $ref: '#/components/schemas/playlist-tracks-ref'
+        type:
+          type: string
+          enum:
+            - playlist
+        uri:
+          type: string
+    simplified-track:
+      title: simplified-track
+      type: object
+      properties:
+        artists:
+          type: array
+          items:
+            $ref: '#/components/schemas/simplified-artist'
+        available_markets:
+          type: array
+          items:
+            type: string
+        disc_number:
+          type: integer
+        duration_ms:
+          type: integer
+        explicit:
+          type: boolean
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        href:
+          type: string
+        id:
+          type: string
+        is_local:
+          type: boolean
+        is_playable:
+          type: boolean
+        linked_from:
+          $ref: '#/components/schemas/linked-track'
+        name:
+          type: string
+        preview_url:
+          type: string
+        restrictions:
+          $ref: '#/components/schemas/track-restriction'
+        track_number:
+          type: integer
+        type:
+          type: string
+          enum:
+            - track
+        uri:
+          type: string
+    track-restriction:
+      title: track-restriction
+      type: object
+      properties:
+        reason:
+          type: string
+          enum:
+            - market
+            - product
+            - explicit
+    tuneable-track:
+      title: tuneable-track
+      type: object
+      properties:
+        acousticness:
+          type: number
+        danceability:
+          type: number
+        duration_ms:
+          type: integer
+        energy:
+          type: number
+        instrumentalness:
+          type: number
+        key:
+          type: integer
+        liveness:
+          type: number
+        loudness:
+          type: number
+        mode:
+          type: integer
+          enum:
+            - 0
+            - 1
+        popularity:
+          type: number
+        speechiness:
+          type: number
+        tempo:
+          type: number
+        time_signature:
+          type: integer
+        valence:
+          type: number
+    simplified-show:
+      title: simplified-show
+      type: object
+      properties:
+        available_markets:
+          type: array
+          items:
+            type: string
+        copyrights:
+          type: array
+          items:
+            $ref: '#/components/schemas/copyright'
+        description:
+          type: string
+        explicit:
+          type: boolean
+        external_urls:
+          $ref: '#/components/schemas/external-url'
+        href:
+          type: string
+        id:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: ''
+        is_externally_hosted:
+          type: boolean
+        languages:
+          type: array
+          items:
+            type: string
+        media_type:
+          type: string
+        name:
+          type: string
+        publisher:
+          type: string
+        type:
+          type: string
+        uri:
+          type: string
