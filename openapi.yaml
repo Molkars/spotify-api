@@ -10,8 +10,6 @@ tags:
     description: Endpoints for working with Albums
   - name: artists
     description: Endpoints for working with Artists
-  - name: tracks
-    description: Endpoints for dealing with Tracks
   - name: search
     description: Endpoints for working with Searching
   - name: me
@@ -22,7 +20,1082 @@ tags:
     description: Endpoints for working with browsing
   - name: following
     description: Endpoints for working with following
-paths: {}
+paths:
+  /albums:
+    get:
+      summary: Get Multiple Albums
+      tags:
+        - albums
+      responses:
+        '200':
+          description: 'Objects are returned in the order requested. If an object is not found, a null value is returned in the appropriate position. Duplicate ids in the query will result in duplicate objects in the response. On error, the header status code is an error code and the response body contains an error object.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  albums:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/album'
+              examples:
+                Example 200:
+                  value:
+                    albums:
+                      - album_type: album
+                        artists:
+                          - external_urls:
+                              spotify: 'https://open.spotify.com/artist/53A0W3U0s8diEn9RhXQhVz'
+                            href: 'https://api.spotify.com/v1/artists/53A0W3U0s8diEn9RhXQhVz'
+                            id: 53A0W3U0s8diEn9RhXQhVz
+                            name: Keane
+                            type: artist
+                            uri: 'spotify:artist:53A0W3U0s8diEn9RhXQhVz'
+                        available_markets:
+                          - AD
+                          - AR
+                          - AT
+                          - AU
+                          - BE
+                          - BG
+                          - BO
+                          - BR
+                          - CH
+                          - CL
+                          - CO
+                          - CR
+                          - CY
+                          - CZ
+                          - DE
+                          - DK
+                          - DO
+                          - EC
+                          - EE
+                          - ES
+                          - FI
+                          - FR
+                          - GB
+                          - GR
+                          - GT
+                          - HK
+                          - HN
+                          - HU
+                          - IE
+                          - IS
+                          - IT
+                          - LI
+                          - LT
+                          - LU
+                          - LV
+                          - MC
+                          - MT
+                          - MY
+                          - NI
+                          - NL
+                          - 'NO'
+                          - NZ
+                          - PA
+                          - PE
+                          - PH
+                          - PL
+                          - PT
+                          - PY
+                          - RO
+                          - SE
+                          - SG
+                          - SI
+                          - SK
+                          - SV
+                          - TR
+                          - TW
+                          - UY
+                        copyrights:
+                          - text: '(C) 2013 Universal Island Records, a division of Universal Music Operations Limited'
+                            type: C
+                          - text: '(P) 2013 Universal Island Records, a division of Universal Music Operations Limited'
+                            type: P
+                        external_ids:
+                          upc: '00602537518357'
+                        external_urls:
+                          spotify: 'https://open.spotify.com/album/41MnTivkwTO3UUJ8DrqEJJ'
+                        genres: []
+                        href: 'https://api.spotify.com/v1/albums/41MnTivkwTO3UUJ8DrqEJJ'
+                        id: 41MnTivkwTO3UUJ8DrqEJJ
+                        images:
+                          - height: 640
+                            url: 'https://i.scdn.co/image/89b92c6b59131776c0cd8e5df46301ffcf36ed69'
+                            width: 640
+                          - height: 300
+                            url: 'https://i.scdn.co/image/eb6f0b2594d81f8d9dced193f3e9a3bc4318aedc'
+                            width: 300
+                          - height: 64
+                            url: 'https://i.scdn.co/image/21e1ebcd7ebd3b679d9d5084bba1e163638b103a'
+                            width: 64
+                        name: The Best Of Keane (Deluxe Edition)
+                        popularity: 65
+                        release_date: '2013-11-08'
+                        release_date_precision: day
+                        tracks:
+                          href: 'https://api.spotify.com/v1/albums/41MnTivkwTO3UUJ8DrqEJJ/tracks?offset=0&limit=50'
+                          items:
+                            - artists:
+                                - external_urls:
+                                    spotify: 'https://open.spotify.com/artist/53A0W3U0s8diEn9RhXQhVz'
+                                  href: 'https://api.spotify.com/v1/artists/53A0W3U0s8diEn9RhXQhVz'
+                                  id: 53A0W3U0s8diEn9RhXQhVz
+                                  name: Keane
+                                  type: artist
+                                  uri: 'spotify:artist:53A0W3U0s8diEn9RhXQhVz'
+                              available_markets:
+                                - AD
+                                - AR
+                                - AT
+                                - AU
+                                - BE
+                                - BG
+                                - BO
+                                - BR
+                                - CH
+                                - CL
+                                - CO
+                                - CR
+                                - CY
+                                - CZ
+                                - DE
+                                - DK
+                                - DO
+                                - EC
+                                - EE
+                                - ES
+                                - FI
+                                - FR
+                                - GB
+                                - GR
+                                - GT
+                                - HK
+                                - HN
+                                - HU
+                                - IE
+                                - IS
+                                - IT
+                                - LI
+                                - LT
+                                - LU
+                                - LV
+                                - MC
+                                - MT
+                                - MY
+                                - NI
+                                - NL
+                                - 'NO'
+                                - NZ
+                                - PA
+                                - PE
+                                - PH
+                                - PL
+                                - PT
+                                - PY
+                                - RO
+                                - SE
+                                - SG
+                                - SI
+                                - SK
+                                - SV
+                                - TR
+                                - TW
+                                - UY
+                              disc_number: 1
+                              duration_ms: 215986
+                              explicit: false
+                              external_urls:
+                                spotify: 'https://open.spotify.com/track/4r9PmSmbAOOWqaGWLf6M9Q'
+                              href: 'https://api.spotify.com/v1/tracks/4r9PmSmbAOOWqaGWLf6M9Q'
+                              id: 4r9PmSmbAOOWqaGWLf6M9Q
+                              name: Everybody's Changing
+                              preview_url: 'https://p.scdn.co/mp3-preview/641fd877ee0f42f3713d1649e20a9734cc64b8f9'
+                              track_number: 1
+                              type: track
+                              uri: 'spotify:track:4r9PmSmbAOOWqaGWLf6M9Q'
+                            - artists:
+                                - external_urls:
+                                    spotify: 'https://open.spotify.com/artist/53A0W3U0s8diEn9RhXQhVz'
+                                  href: 'https://api.spotify.com/v1/artists/53A0W3U0s8diEn9RhXQhVz'
+                                  id: 53A0W3U0s8diEn9RhXQhVz
+                                  name: Keane
+                                  type: artist
+                                  uri: 'spotify:artist:53A0W3U0s8diEn9RhXQhVz'
+                              available_markets:
+                                - AD
+                                - AR
+                                - AT
+                                - AU
+                                - BE
+                                - BG
+                                - BO
+                                - BR
+                                - CH
+                                - CL
+                                - CO
+                                - CR
+                                - CY
+                                - CZ
+                                - DE
+                                - DK
+                                - DO
+                                - EC
+                                - EE
+                                - ES
+                                - FI
+                                - FR
+                                - GB
+                                - GR
+                                - GT
+                                - HK
+                                - HN
+                                - HU
+                                - IE
+                                - IS
+                                - IT
+                                - LI
+                                - LT
+                                - LU
+                                - LV
+                                - MC
+                                - MT
+                                - MY
+                                - NI
+                                - NL
+                                - 'NO'
+                                - NZ
+                                - PA
+                                - PE
+                                - PH
+                                - PL
+                                - PT
+                                - PY
+                                - RO
+                                - SE
+                                - SG
+                                - SI
+                                - SK
+                                - SV
+                                - TR
+                                - TW
+                                - UY
+                              disc_number: 1
+                              duration_ms: 235880
+                              explicit: false
+                              external_urls:
+                                spotify: 'https://open.spotify.com/track/0HJQD8uqX2Bq5HVdLnd3ep'
+                              href: 'https://api.spotify.com/v1/tracks/0HJQD8uqX2Bq5HVdLnd3ep'
+                              id: 0HJQD8uqX2Bq5HVdLnd3ep
+                              name: Somewhere Only We Know
+                              preview_url: 'https://p.scdn.co/mp3-preview/e001676375ea2b4807cee2f98b51f2f3fe0d109b'
+                              track_number: 2
+                              type: track
+                              uri: 'spotify:track:0HJQD8uqX2Bq5HVdLnd3ep'
+                            - ...: null
+                          limit: 50
+                          next: null
+                          offset: 0
+                          previous: null
+                          total: 9
+                        type: album
+                        uri: 'spotify:album:6UXCm6bOO4gFlDQZV5yL37'
+      operationId: get-multiple-albums
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: ids
+          description: 'A comma-separated list of the Spotify IDs for the albums. Maximum: 20 IDs.'
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: market
+          description: An ISO 3166-1 alpha-2 country code or the string from_token. Provide this parameter if you want to apply Track Relinking.
+      description: Get Spotify catalog information for multiple albums identified by their Spotify IDs.
+  '/albums/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: 'The Spotify ID of the album. '
+    get:
+      summary: Get an Album
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/album'
+              examples:
+                Example 200:
+                  value:
+                    album_type: album
+                    artists:
+                      - external_urls:
+                          spotify: 'https://open.spotify.com/artist/2BTZIqw0ntH9MvilQ3ewNY'
+                        href: 'https://api.spotify.com/v1/artists/2BTZIqw0ntH9MvilQ3ewNY'
+                        id: 2BTZIqw0ntH9MvilQ3ewNY
+                        name: Cyndi Lauper
+                        type: artist
+                        uri: 'spotify:artist:2BTZIqw0ntH9MvilQ3ewNY'
+                    available_markets:
+                      - AD
+                      - AR
+                      - AT
+                      - AU
+                      - BE
+                      - BG
+                      - BO
+                      - BR
+                      - CA
+                      - CH
+                      - CL
+                      - CO
+                      - CR
+                      - CY
+                      - CZ
+                      - DE
+                      - DK
+                      - DO
+                      - EC
+                      - EE
+                      - ES
+                      - FI
+                      - FR
+                      - GB
+                      - GR
+                      - GT
+                      - HK
+                      - HN
+                      - HU
+                      - IE
+                      - IS
+                      - IT
+                      - LI
+                      - LT
+                      - LU
+                      - LV
+                      - MC
+                      - MT
+                      - MX
+                      - MY
+                      - NI
+                      - NL
+                      - 'NO'
+                      - NZ
+                      - PA
+                      - PE
+                      - PH
+                      - PT
+                      - PY
+                      - RO
+                      - SE
+                      - SG
+                      - SI
+                      - SK
+                      - SV
+                      - TW
+                      - UY
+                    copyrights:
+                      - text: (P) 2000 Sony Music Entertainment Inc.
+                        type: P
+                    external_ids:
+                      upc: '5099749994324'
+                    external_urls:
+                      spotify: 'https://open.spotify.com/album/0sNOF9WDwhWunNAHPD3Baj'
+                    genres: []
+                    href: 'https://api.spotify.com/v1/albums/0sNOF9WDwhWunNAHPD3Baj'
+                    id: 0sNOF9WDwhWunNAHPD3Baj
+                    images:
+                      - height: 640
+                        url: 'https://i.scdn.co/image/07c323340e03e25a8e5dd5b9a8ec72b69c50089d'
+                        width: 640
+                      - height: 300
+                        url: 'https://i.scdn.co/image/8b662d81966a0ec40dc10563807696a8479cd48b'
+                        width: 300
+                      - height: 64
+                        url: 'https://i.scdn.co/image/54b3222c8aaa77890d1ac37b3aaaa1fc9ba630ae'
+                        width: 64
+                    name: She's So Unusual
+                    popularity: 39
+                    release_date: '1983'
+                    release_date_precision: year
+                    tracks:
+                      href: 'https://api.spotify.com/v1/albums/0sNOF9WDwhWunNAHPD3Baj/tracks?offset=0&limit=50'
+                      items:
+                        - artists:
+                            - external_urls:
+                                spotify: 'https://open.spotify.com/artist/2BTZIqw0ntH9MvilQ3ewNY'
+                              href: 'https://api.spotify.com/v1/artists/2BTZIqw0ntH9MvilQ3ewNY'
+                              id: 2BTZIqw0ntH9MvilQ3ewNY
+                              name: Cyndi Lauper
+                              type: artist
+                              uri: 'spotify:artist:2BTZIqw0ntH9MvilQ3ewNY'
+                          available_markets:
+                            - AD
+                            - AR
+                            - AT
+                            - AU
+                            - BE
+                            - BG
+                            - BO
+                            - BR
+                            - CA
+                            - CH
+                            - CL
+                            - CO
+                            - CR
+                            - CY
+                            - CZ
+                            - DE
+                            - DK
+                            - DO
+                            - EC
+                            - EE
+                            - ES
+                            - FI
+                            - FR
+                            - GB
+                            - GR
+                            - GT
+                            - HK
+                            - HN
+                            - HU
+                            - IE
+                            - IS
+                            - IT
+                            - LI
+                            - LT
+                            - LU
+                            - LV
+                            - MC
+                            - MT
+                            - MX
+                            - MY
+                            - NI
+                            - NL
+                            - 'NO'
+                            - NZ
+                            - PA
+                            - PE
+                            - PH
+                            - PT
+                            - PY
+                            - RO
+                            - SE
+                            - SG
+                            - SI
+                            - SK
+                            - SV
+                            - TW
+                            - UY
+                          disc_number: 1
+                          duration_ms: 305560
+                          explicit: false
+                          external_urls:
+                            spotify: 'https://open.spotify.com/track/3f9zqUnrnIq0LANhmnaF0V'
+                          href: 'https://api.spotify.com/v1/tracks/3f9zqUnrnIq0LANhmnaF0V'
+                          id: 3f9zqUnrnIq0LANhmnaF0V
+                          name: Money Changes Everything
+                          preview_url: 'https://p.scdn.co/mp3-preview/01bb2a6c9a89c05a4300aea427241b1719a26b06'
+                          track_number: 1
+                          type: track
+                          uri: 'spotify:track:3f9zqUnrnIq0LANhmnaF0V'
+                        - ...: null
+                      limit: 50
+                      next: null
+                      offset: 0
+                      previous: null
+                      total: 13
+                    type: album
+                    uri: 'spotify:album:0sNOF9WDwhWunNAHPD3Baj'
+      operationId: get-album
+      description: Get Spotify catalog information for a single album.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: market
+          description: The market you'd like to request. Synonym for country
+  '/albums/{id}/tracks':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: The Spotify ID of the album.
+    get:
+      summary: Get an Album's Tracks
+      tags:
+        - albums
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  href:
+                    type: string
+                    description: A link to the Web API endpoint returning the full result of the request.
+                  items:
+                    type: array
+                    description: The requested data.
+                    items:
+                      $ref: '#/components/schemas/simplified-track'
+                  limit:
+                    type: integer
+                    description: The maximum number of items in the response (as set in the query or by default).
+                  next:
+                    type: string
+                    description: URL to the next page of items. ( null if none)
+                  total:
+                    type: integer
+                    description: The total number of items available to return.
+              examples:
+                Example 200:
+                  value:
+                    href: 'https://api.spotify.com/v1/albums/6akEvsycLGftJxYudPjmqK/tracks?offset=0&limit=2'
+                    items:
+                      - artists:
+                          - external_urls:
+                              spotify: 'https://open.spotify.com/artist/08td7MxkoHQkXnWAYD8d6Q'
+                            href: 'https://api.spotify.com/v1/artists/08td7MxkoHQkXnWAYD8d6Q'
+                            id: 08td7MxkoHQkXnWAYD8d6Q
+                            name: Tania Bowra
+                            type: artist
+                            uri: 'spotify:artist:08td7MxkoHQkXnWAYD8d6Q'
+                        available_markets:
+                          - AD
+                          - AR
+                          - AT
+                          - AU
+                          - BE
+                          - BG
+                          - BO
+                          - BR
+                          - CA
+                          - CH
+                          - CL
+                          - CO
+                          - CR
+                          - CY
+                          - CZ
+                          - DE
+                          - DK
+                          - DO
+                          - EC
+                          - EE
+                          - ES
+                          - FI
+                          - FR
+                          - GB
+                          - GR
+                          - GT
+                          - HK
+                          - HN
+                          - HU
+                          - IE
+                          - IS
+                          - IT
+                          - LI
+                          - LT
+                          - LU
+                          - LV
+                          - MC
+                          - MT
+                          - MX
+                          - MY
+                          - NI
+                          - NL
+                          - 'NO'
+                          - NZ
+                          - PA
+                          - PE
+                          - PH
+                          - PL
+                          - PT
+                          - PY
+                          - RO
+                          - SE
+                          - SG
+                          - SI
+                          - SK
+                          - SV
+                          - TR
+                          - TW
+                          - US
+                          - UY
+                        disc_number: 1
+                        duration_ms: 276773
+                        explicit: false
+                        external_urls:
+                          spotify: 'https://open.spotify.com/track/2TpxZ7JUBn3uw46aR7qd6V'
+                        href: 'https://api.spotify.com/v1/tracks/2TpxZ7JUBn3uw46aR7qd6V'
+                        id: 2TpxZ7JUBn3uw46aR7qd6V
+                        name: All I Want
+                        preview_url: 'https://p.scdn.co/mp3-preview/6d00206e32194d15df329d4770e4fa1f2ced3f57'
+                        track_number: 1
+                        type: track
+                        uri: 'spotify:track:2TpxZ7JUBn3uw46aR7qd6V'
+                      - artists:
+                          - external_urls:
+                              spotify: 'https://open.spotify.com/artist/08td7MxkoHQkXnWAYD8d6Q'
+                            href: 'https://api.spotify.com/v1/artists/08td7MxkoHQkXnWAYD8d6Q'
+                            id: 08td7MxkoHQkXnWAYD8d6Q
+                            name: Tania Bowra
+                            type: artist
+                            uri: 'spotify:artist:08td7MxkoHQkXnWAYD8d6Q'
+                        available_markets:
+                          - AD
+                          - AR
+                          - AT
+                          - AU
+                          - BE
+                          - BG
+                          - BO
+                          - BR
+                          - CA
+                          - CH
+                          - CL
+                          - CO
+                          - CR
+                          - CY
+                          - CZ
+                          - DE
+                          - DK
+                          - DO
+                          - EC
+                          - EE
+                          - ES
+                          - FI
+                          - FR
+                          - GB
+                          - GR
+                          - GT
+                          - HK
+                          - HN
+                          - HU
+                          - IE
+                          - IS
+                          - IT
+                          - LI
+                          - LT
+                          - LU
+                          - LV
+                          - MC
+                          - MT
+                          - MX
+                          - MY
+                          - NI
+                          - NL
+                          - 'NO'
+                          - NZ
+                          - PA
+                          - PE
+                          - PH
+                          - PL
+                          - PT
+                          - PY
+                          - RO
+                          - SE
+                          - SG
+                          - SI
+                          - SK
+                          - SV
+                          - TR
+                          - TW
+                          - US
+                          - UY
+                        disc_number: 1
+                        duration_ms: 247680
+                        explicit: false
+                        external_urls:
+                          spotify: 'https://open.spotify.com/track/4PjcfyZZVE10TFd9EKA72r'
+                        href: 'https://api.spotify.com/v1/tracks/4PjcfyZZVE10TFd9EKA72r'
+                        id: 4PjcfyZZVE10TFd9EKA72r
+                        name: Someday
+                        preview_url: 'https://p.scdn.co/mp3-preview/2b15de922bf4f4b8cfe09c8448079b8ff7a45a5f'
+                        track_number: 2
+                        type: track
+                        uri: 'spotify:track:4PjcfyZZVE10TFd9EKA72r'
+                    limit: 2
+                    next: 'https://api.spotify.com/v1/albums/6akEvsycLGftJxYudPjmqK/tracks?offset=2&limit=2'
+                    offset: 0
+                    previous: null
+                    total: 11
+      operationId: get-albums-tracks
+      description: Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number of tracks returned.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: market
+          description: An ISO 3166-1 alpha-2 country code or the string from_token. Provide this parameter if you want to apply Track Relinking.
+        - schema:
+            type: string
+          in: query
+          name: limit
+          description: 'The maximum number of tracks to return. Default: 20. Minimum: 1. Maximum: 50.'
+        - schema:
+            type: string
+          in: query
+          name: offset
+          description: 'The index of the first track to return. Default: 0 (the first object). Use with limit to get the next set of tracks.'
+  /artists:
+    get:
+      summary: Get Multiple Artists
+      tags:
+        - artists
+      responses:
+        '200':
+          description: 'Objects are returned in the order requested. If an object is not found, a null value is returned in the appropriate position. Duplicate ids in the query will result in duplicate objects in the response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artists:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/artist'
+              examples:
+                Example 200:
+                  value:
+                    artists:
+                      - external_urls:
+                          spotify: 'https://open.spotify.com/artist/0oSGxfWSnnOXhD2fKuz2Gy'
+                        followers:
+                          href: null
+                          total: 633494
+                        genres:
+                          - art rock
+                          - glam rock
+                          - permanent wave
+                        href: 'https://api.spotify.com/v1/artists/0oSGxfWSnnOXhD2fKuz2Gy'
+                        id: 0oSGxfWSnnOXhD2fKuz2Gy
+                        images:
+                          - height: 1000
+                            url: 'https://i.scdn.co/image/32bd9707b42a2c081482ec9cd3ffa8879f659f95'
+                            width: 1000
+                          - height: 640
+                            url: 'https://i.scdn.co/image/865f24753e5e4f40a383bf24a9cdda598a4559a8'
+                            width: 640
+                          - height: 200
+                            url: 'https://i.scdn.co/image/7ddd6fa5cf78aee2f2e8b347616151393022b7d9'
+                            width: 200
+                          - height: 64
+                            url: 'https://i.scdn.co/image/c8dc28c191432862afce298216458a6f00bbfbd8'
+                            width: 64
+                        name: David Bowie
+                        popularity: 77
+                        type: artist
+                        uri: 'spotify:artist:0oSGxfWSnnOXhD2fKuz2Gy'
+                      - external_urls:
+                          spotify: 'https://open.spotify.com/artist/3dBVyJ7JuOMt4GE9607Qin'
+                        followers:
+                          href: null
+                          total: 52338
+                        genres:
+                          - glam rock
+                          - protopunk
+                        href: 'https://api.spotify.com/v1/artists/3dBVyJ7JuOMt4GE9607Qin'
+                        id: 3dBVyJ7JuOMt4GE9607Qin
+                        images:
+                          - height: 1300
+                            url: 'https://i.scdn.co/image/5515a710c94ccd4edd8b9a0587778ed5e3f997da'
+                            width: 1000
+                          - height: 832
+                            url: 'https://i.scdn.co/image/c990e667b4ca8240c73b0db06e6d76a3b27ce929'
+                            width: 640
+                          - height: 260
+                            url: 'https://i.scdn.co/image/de2fa1d11c59e63143117d44ec9990b9e40451a2'
+                            width: 200
+                          - height: 83
+                            url: 'https://i.scdn.co/image/b39638735adb4a4a54621293b99ab65c546f605e'
+                            width: 64
+                        name: T. Rex
+                        popularity: 58
+                        type: artist
+                        uri: 'spotify:artist:3dBVyJ7JuOMt4GE9607Qin'
+      operationId: get-artists
+      description: Get Spotify catalog information for several artists based on their Spotify IDs.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: ids
+          description: 'A comma-separated list of the Spotify IDs for the artists: 50 IDs'
+          required: true
+  '/artists/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: The Spotify ID of the artist.
+    get:
+      summary: Get an Artist
+      tags:
+        - artists
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/artist'
+              examples:
+                Example 200:
+                  value:
+                    external_urls:
+                      spotify: 'https://open.spotify.com/artist/0OdUWJ0sBjDrqHygGUXeCF'
+                    followers:
+                      href: null
+                      total: 306565
+                    genres:
+                      - indie folk
+                      - indie pop
+                    href: 'https://api.spotify.com/v1/artists/0OdUWJ0sBjDrqHygGUXeCF'
+                    id: 0OdUWJ0sBjDrqHygGUXeCF
+                    images:
+                      - height: 816
+                        url: 'https://i.scdn.co/image/eb266625dab075341e8c4378a177a27370f91903'
+                        width: 1000
+                      - height: 522
+                        url: 'https://i.scdn.co/image/2f91c3cace3c5a6a48f3d0e2fd21364d4911b332'
+                        width: 640
+                      - height: 163
+                        url: 'https://i.scdn.co/image/2efc93d7ee88435116093274980f04ebceb7b527'
+                        width: 200
+                      - height: 52
+                        url: 'https://i.scdn.co/image/4f25297750dfa4051195c36809a9049f6b841a23'
+                        width: 64
+                    name: Band of Horses
+                    popularity: 59
+                    type: artist
+                    uri: 'spotify:artist:0OdUWJ0sBjDrqHygGUXeCF'
+      operationId: get-artist
+      description: Get Spotify catalog information for a single artist identified by their unique Spotify ID.
+  '/artists/{id}/top-tracks':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: The Spotify ID for the artist
+    get:
+      summary: Get an Artist's Top Tracks
+      tags:
+        - artists
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tracks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/track'
+              examples:
+                example-1:
+                  value:
+                    tracks:
+                      - album:
+                          album_type: album
+                          artists:
+                            - external_urls:
+                                spotify: 'https://open.spotify.com/artist/43ZHCT0cAZBISjO8DG9PnE'
+                              href: 'https://api.spotify.com/v1/artists/43ZHCT0cAZBISjO8DG9PnE'
+                              id: 43ZHCT0cAZBISjO8DG9PnE
+                              name: Elvis Presley
+                              type: artist
+                              uri: 'spotify:artist:43ZHCT0cAZBISjO8DG9PnE'
+                          available_markets:
+                            - AD
+                            - AR
+                            - AT
+                            - AU
+                            - BE
+                            - BG
+                            - BO
+                            - BR
+                            - CA
+                            - CH
+                            - CL
+                            - CO
+                            - CR
+                            - CY
+                            - CZ
+                            - DE
+                            - DK
+                            - DO
+                            - EC
+                            - EE
+                            - ES
+                            - FI
+                            - FR
+                            - GB
+                            - GR
+                            - GT
+                            - HK
+                            - HN
+                            - HU
+                            - ID
+                            - IE
+                            - IS
+                            - IT
+                            - JP
+                            - LI
+                            - LT
+                            - LU
+                            - LV
+                            - MC
+                            - MT
+                            - MX
+                            - MY
+                            - NI
+                            - NL
+                            - 'NO'
+                            - NZ
+                            - PA
+                            - PE
+                            - PH
+                            - PL
+                            - PT
+                            - PY
+                            - SE
+                            - SG
+                            - SK
+                            - SV
+                            - TR
+                            - TW
+                            - US
+                            - UY
+                          external_urls:
+                            spotify: 'https://open.spotify.com/album/7xe8VI48TxUpU1IIo0RfGi'
+                          href: 'https://api.spotify.com/v1/albums/7xe8VI48TxUpU1IIo0RfGi'
+                          id: 7xe8VI48TxUpU1IIo0RfGi
+                          images:
+                            - height: 640
+                              url: 'https://i.scdn.co/image/4295b5ff74d4f944367144acbe616b6f62d20b17'
+                              width: 640
+                            - height: 300
+                              url: 'https://i.scdn.co/image/203104e5843248c700b078f391d4bc759c5d7f47'
+                              width: 300
+                            - height: 64
+                              url: 'https://i.scdn.co/image/0c0a172373b0211c590b241270d05b70889075a1'
+                              width: 64
+                          name: Blue Hawaii
+                          type: album
+                          uri: 'spotify:album:7xe8VI48TxUpU1IIo0RfGi'
+                        artists:
+                          - external_urls:
+                              spotify: 'https://open.spotify.com/artist/43ZHCT0cAZBISjO8DG9PnE'
+                            href: 'https://api.spotify.com/v1/artists/43ZHCT0cAZBISjO8DG9PnE'
+                            id: 43ZHCT0cAZBISjO8DG9PnE
+                            name: Elvis Presley
+                            type: artist
+                            uri: 'spotify:artist:43ZHCT0cAZBISjO8DG9PnE'
+                        available_markets:
+                          - AD
+                          - AR
+                          - AT
+                          - AU
+                          - BE
+                          - BG
+                          - BO
+                          - BR
+                          - CA
+                          - CH
+                          - CL
+                          - CO
+                          - CR
+                          - CY
+                          - CZ
+                          - DE
+                          - DK
+                          - DO
+                          - EC
+                          - EE
+                          - ES
+                          - FI
+                          - FR
+                          - GB
+                          - GR
+                          - GT
+                          - HK
+                          - HN
+                          - HU
+                          - ID
+                          - IE
+                          - IS
+                          - IT
+                          - JP
+                          - LI
+                          - LT
+                          - LU
+                          - LV
+                          - MC
+                          - MT
+                          - MX
+                          - MY
+                          - NI
+                          - NL
+                          - 'NO'
+                          - NZ
+                          - PA
+                          - PE
+                          - PH
+                          - PL
+                          - PT
+                          - PY
+                          - SE
+                          - SG
+                          - SK
+                          - SV
+                          - TR
+                          - TW
+                          - US
+                          - UY
+                        disc_number: 1
+                        duration_ms: 179773
+                        explicit: false
+                        external_ids:
+                          isrc: USRC16101350
+                        external_urls:
+                          spotify: 'https://open.spotify.com/track/44AyOl4qVkzS48vBsbNXaC'
+                        href: 'https://api.spotify.com/v1/tracks/44AyOl4qVkzS48vBsbNXaC'
+                        id: 44AyOl4qVkzS48vBsbNXaC
+                        name: Can't Help Falling in Love
+                        popularity: 70
+                        preview_url: 'https://p.scdn.co/mp3-preview/26e409b39a2da6dc18fab61020c90be2938dc0e9'
+                        track_number: 5
+                        type: track
+                        uri: 'spotify:track:44AyOl4qVkzS48vBsbNXaC'
+      operationId: get-artists-top-tracks
+      description: Get Spotify catalog information about an artist’s top tracks by country.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: market
+          description: An ISO 3166-1 alpha-2 country code or the string from_token. Synonym for country
 x-basePath: '/{version}'
 servers:
   - url: 'https://api.spotify.com/v1'
@@ -57,9 +1130,15 @@ components:
     refreshable-user-authentication:
       type: oauth2
       flows:
-        implicit:
-          authorizationUrl: 'https://accounts.authorize.com/'
+        authorizationCode:
+          authorizationUrl: 'https://accounts.spotify.com/authorize'
+          tokenUrl: 'https://accounts.spotify.com/api/token?=authorization_code'
+          refreshUrl: 'https://api.spotify.com/v1/refresh'
           scopes:
+            playlist-read-private: ''
+            playlist-read-collaborative: ''
+            playlist-modify-public: ''
+            playlist-modify-private: ''
             user-library-read: ''
             user-library-modify: ''
             user-read-private: ''
@@ -67,10 +1146,7 @@ components:
             user-read-email: ''
             user-follow-read: ''
             user-follow-modify: ''
-            playlist-read-collaborative: ''
-            playlist-read-private: ''
-            playlist-modify-public: ''
-            playlist-modify-private: ''
+            user-top-read: ''
   schemas:
     album:
       type: object
@@ -649,8 +1725,7 @@ components:
           format: date-time
           description: Unix Millisecond Timestamp when data was fetched.
         is_playing:
-          type:
-            boolean
+          type: boolean
           description: 'If something is currently playing, return true.'
     disallows:
       title: disallows
@@ -959,6 +2034,119 @@ components:
             - PREMIUM_REQUIRED
             - UNKNOWN
           description: |2-
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1534,3 +2722,5 @@ components:
         uri:
           type: string
           description: The Spotify URI for the show.
+security:
+  - refreshable-user-authentication: []
