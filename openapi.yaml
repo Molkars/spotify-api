@@ -310,11 +310,7 @@ paths:
           name: ids
           description: 'A comma-separated list of the Spotify IDs for the albums. Maximum: 20 IDs.'
           required: true
-        - schema:
-            type: string
-          in: query
-          name: market
-          description: An ISO 3166-1 alpha-2 country code or the string from_token. Provide this parameter if you want to apply Track Relinking.
+        - $ref: '#/components/parameters/trait_market'
       description: Get Spotify catalog information for multiple albums identified by their Spotify IDs.
   '/albums/{id}':
     parameters:
@@ -520,11 +516,7 @@ paths:
       operationId: get-album
       description: Get Spotify catalog information for a single album.
       parameters:
-        - schema:
-            type: string
-          in: query
-          name: market
-          description: The market you'd like to request. Synonym for country
+        - $ref: '#/components/parameters/trait_market'
   '/albums/{id}/tracks':
     parameters:
       - schema:
@@ -737,21 +729,9 @@ paths:
       operationId: get-albums-tracks
       description: Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number of tracks returned.
       parameters:
-        - schema:
-            type: string
-          in: query
-          name: market
-          description: An ISO 3166-1 alpha-2 country code or the string from_token. Provide this parameter if you want to apply Track Relinking.
-        - schema:
-            type: string
-          in: query
-          name: limit
-          description: 'The maximum number of tracks to return. Default: 20. Minimum: 1. Maximum: 50.'
-        - schema:
-            type: string
-          in: query
-          name: offset
-          description: 'The index of the first track to return. Default: 0 (the first object). Use with limit to get the next set of tracks.'
+        - $ref: '#/components/parameters/trait_market'
+        - $ref: '#/components/parameters/trait_paged_limit'
+        - $ref: '#/components/parameters/trait_paged_offset'
   /artists:
     get:
       summary: Get Multiple Artists
@@ -1091,11 +1071,7 @@ paths:
       operationId: get-artists-top-tracks
       description: Get Spotify catalog information about an artist’s top tracks by country.
       parameters:
-        - schema:
-            type: string
-          in: query
-          name: market
-          description: An ISO 3166-1 alpha-2 country code or the string from_token. Synonym for country
+        - $ref: '#/components/parameters/trait_market'
   '/artists/{id}/related-artists':
     parameters:
       - schema:
@@ -1208,21 +1184,9 @@ paths:
           in: query
           name: include_groups
           description: 'A comma-separated list of keywords that will be used to filter the response. If not supplied, all album types will be returned. Valid values are:- album - single - appears_on - compilation For example: include_groups=album,single.'
-        - schema:
-            type: string
-          in: query
-          name: market
-          description: 'Synonym for country. An ISO 3166-1 alpha-2 country code or the string from_token. Supply this parameter to limit the response to one particular geographical market. For example, for albums available in Sweden: market=SE. If not given, results will be returned for all markets and you are likely to get duplicate results per album, one for each market in which the album is available!'
-        - schema:
-            type: integer
-          in: query
-          name: limit
-          description: 'The number of album objects to return. Default: 20. Minimum: 1. Maximum: 50. For example: '
-        - schema:
-            type: integer
-          in: query
-          name: offset
-          description: 'The index of the first album to return. Default: 0 (i.e., the first album). Use with limit to get the next set of albums.'
+        - $ref: '#/components/parameters/trait_market'
+        - $ref: '#/components/parameters/trait_paged_limit'
+        - $ref: '#/components/parameters/trait_paged_offset'
   /browse/new-releases:
     get:
       summary: Get New Releases
@@ -1440,21 +1404,370 @@ paths:
       operationId: get-new-releases
       description: 'Get a list of new album releases featured in Spotify (shown, for example, on a Spotify player’s “Browse” tab).'
       parameters:
+        - $ref: '#/components/parameters/trait_country'
+        - $ref: '#/components/parameters/trait_paged_limit'
+        - $ref: '#/components/parameters/trait_paged_offset'
+  /browse/featured-playlists:
+    get:
+      summary: Get Featured Playlists
+      tags:
+        - browse
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  playlists:
+                    $ref: '#/components/schemas/paging-simplified-playlist'
+              examples:
+                Example 200:
+                  value:
+                    message: 'Monday morning music, coming right up!'
+                    playlists:
+                      href: 'https://api.spotify.com/v1/browse/featured-playlists?country=SE&timestamp=2015-05-18T06:44:32&offset=0&limit=2'
+                      items:
+                        - collaborative: false
+                          description: Relaxed deep house to slowly help you get back on your feet and ready yourself for a productive week.
+                          external_urls:
+                            spotify: 'http://open.spotify.com/user/spotify/playlist/6ftJBzU2LLQcaKefMi7ee7'
+                          href: 'https://api.spotify.com/v1/users/spotify/playlists/6ftJBzU2LLQcaKefMi7ee7'
+                          id: 6ftJBzU2LLQcaKefMi7ee7
+                          images:
+                            - height: 300
+                              url: 'https://i.scdn.co/image/7bd33c65ebd1e45975bbcbbf513bafe272f033c7'
+                              width: 300
+                          name: Monday Morning Mood
+                          owner:
+                            external_urls:
+                              spotify: 'http://open.spotify.com/user/spotify'
+                            href: 'https://api.spotify.com/v1/users/spotify'
+                            id: spotify
+                            type: user
+                            uri: 'spotify:user:spotify'
+                          public: null
+                          snapshot_id: WwGvSIVUkUvGvqjgj/bQHlRycYmJ2TkoIxYfoalWlmIZT6TvsgvGMgtQ2dGbkrAW
+                          tracks:
+                            href: 'https://api.spotify.com/v1/users/spotify/playlists/6ftJBzU2LLQcaKefMi7ee7/tracks'
+                            total: 245
+                          type: playlist
+                          uri: 'spotify:user:spotify:playlist:6ftJBzU2LLQcaKefMi7ee7'
+                        - collaborative: false
+                          description: Du kommer studsa ur sängen med den här spellistan.
+                          external_urls:
+                            spotify: 'http://open.spotify.com/user/spotify__sverige/playlist/4uOEx4OUrkoGNZoIlWMUbO'
+                          href: 'https://api.spotify.com/v1/users/spotify__sverige/playlists/4uOEx4OUrkoGNZoIlWMUbO'
+                          id: 4uOEx4OUrkoGNZoIlWMUbO
+                          images:
+                            - height: 300
+                              url: 'https://i.scdn.co/image/24aa1d1b491dd529b9c03392f350740ed73438d8'
+                              width: 300
+                          name: Upp och hoppa!
+                          owner:
+                            external_urls:
+                              spotify: 'http://open.spotify.com/user/spotify__sverige'
+                            href: 'https://api.spotify.com/v1/users/spotify__sverige'
+                            id: spotify__sverige
+                            type: user
+                            uri: 'spotify:user:spotify__sverige'
+                          public: null
+                          snapshot_id: 0j9Rcbt2KtCXEXKtKy/tnSL5r4byjDBOIVY1dn4S6GV73EEUgNuK2hU+QyDuNnXz
+                          tracks:
+                            href: 'https://api.spotify.com/v1/users/spotify__sverige/playlists/4uOEx4OUrkoGNZoIlWMUbO/tracks'
+                            total: 38
+                          type: playlist
+                          uri: 'spotify:user:spotify__sverige:playlist:4uOEx4OUrkoGNZoIlWMUbO'
+                      limit: 2
+                      next: 'https://api.spotify.com/v1/browse/featured-playlists?country=SE&timestamp=2015-05-18T06:44:32&offset=2&limit=2'
+                      offset: 0
+                      previous: null
+                      total: 12
+      operationId: get-featured-playlists
+      description: 'Get a list of Spotify featured playlists (shown, for example, on a Spotify player’s ‘Browse’ tab).'
+      parameters:
+        - $ref: '#/components/parameters/trait_country'
+        - $ref: '#/components/parameters/trait_locale'
         - schema:
             type: string
           in: query
-          name: country
-          description: 'A country: an ISO 3166-1 alpha-2 country code. Provide this parameter if you want the list of returned items to be relevant to a particular country. If omitted, the returned items will be relevant to all countries.'
+          name: timestamp
+          description: 'A timestamp in ISO 8601 format: yyyy-MM-ddTHH:mm:ss. Use this parameter to specify the user’s local time to get results tailored for that specific date and time in the day. If not provided, the response defaults to the current UTC time. Example: “2014-10-23T09:00:00” for a user whose local time is 9AM. If there were no featured playlists (or there is no data) at the specified time, the response will revert to the current UTC time.'
+        - $ref: '#/components/parameters/trait_paged_limit'
+        - $ref: '#/components/parameters/trait_paged_offset'
+  /browse/categories:
+    get:
+      summary: Get All Categories
+      tags:
+        - browse
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categories:
+                    $ref: '#/components/schemas/paging-categories'
+              examples:
+                Example 200:
+                  value:
+                    categories:
+                      href: 'https://api.spotify.com/v1/browse/categories?offset=0&limit=20'
+                      items:
+                        - href: 'https://api.spotify.com/v1/browse/categories/toplists'
+                          icons:
+                            - height: 275
+                              url: 'https://datsnxq1rwndn.cloudfront.net/media/derived/toplists_11160599e6a04ac5d6f2757f5511778f_0_0_275_275.jpg'
+                              width: 275
+                          id: toplists
+                          name: Top Lists
+                        - href: 'https://api.spotify.com/v1/browse/categories/mood'
+                          icons:
+                            - height: 274
+                              url: 'https://datsnxq1rwndn.cloudfront.net/media/original/mood-274x274_976986a31ac8c49794cbdc7246fd5ad7_274x274.jpg'
+                              width: 274
+                          id: mood
+                          name: Mood
+                        - href: 'https://api.spotify.com/v1/browse/categories/party'
+                          icons:
+                            - height: 274
+                              url: 'https://datsnxq1rwndn.cloudfront.net/media/derived/party-274x274_73d1907a7371c3bb96a288390a96ee27_0_0_274_274.jpg'
+                              width: 274
+                          id: party
+                          name: Party
+                        - href: 'https://api.spotify.com/v1/browse/categories/pop'
+                          icons:
+                            - height: 274
+                              url: 'https://datsnxq1rwndn.cloudfront.net/media/derived/pop-274x274_447148649685019f5e2a03a39e78ba52_0_0_274_274.jpg'
+                              width: 274
+                          id: pop
+                          name: Pop
+                        - href: 'https://api.spotify.com/v1/browse/categories/workout'
+                          icons:
+                            - height: 275
+                              url: 'https://datsnxq1rwndn.cloudfront.net/media/derived/workout_856581c1c545a5305e49a3cd8be804a0_0_0_275_275.jpg'
+                              width: 275
+                          id: workout
+                          name: Workout
+                        - ...
+                      limit: 20
+                      next: 'https://api.spotify.com/v1/browse/categories?offset=20&limit=20'
+                      offset: 0
+                      previous: null
+                      total: 31
+      operationId: get-categories
+      description: 'Get a list of categories used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).'
+      parameters:
+        - $ref: '#/components/parameters/trait_country'
+        - $ref: '#/components/parameters/trait_locale'
+        - $ref: '#/components/parameters/trait_paged_limit'
+        - $ref: '#/components/parameters/trait_paged_offset'
+  '/browse/categories/{category_id}/playlists':
+    parameters:
+      - schema:
+          type: string
+        name: category_id
+        in: path
+        required: true
+        description: The Spotify category ID for the category.
+    get:
+      summary: Get a Category's Playlists
+      tags:
+        - browse
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  playlists:
+                    $ref: '#/components/schemas/paging-simplified-playlist'
+              examples:
+                Example 200:
+                  value:
+                    playlists:
+                      href: 'https://api.spotify.com/v1/browse/categories/party/playlists?country=BR&offset=0&limit=2'
+                      items:
+                        - collaborative: false
+                          description: 'Chegou o grande dia, aperte o play e partiu fim de semana!'
+                          external_urls:
+                            spotify: 'https://open.spotify.com/playlist/37i9dQZF1DX8mBRYewE6or'
+                          href: 'https://api.spotify.com/v1/playlists/37i9dQZF1DX8mBRYewE6or'
+                          id: 37i9dQZF1DX8mBRYewE6or
+                          images:
+                            - height: 300
+                              url: 'https://i.scdn.co/image/ab67706f00000002206a95fa5badbe1d33b65e14'
+                              width: 300
+                          name: Sexta
+                          owner:
+                            display_name: Spotify
+                            external_urls:
+                              spotify: 'https://open.spotify.com/user/spotify'
+                            href: 'https://api.spotify.com/v1/users/spotify'
+                            id: spotify
+                            type: user
+                            uri: 'spotify:user:spotify'
+                          primary_color: null
+                          public: null
+                          snapshot_id: MTU3NDM1NjI0MiwwMDAwMDAwMGQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0Mjdl
+                          tracks:
+                            href: 'https://api.spotify.com/v1/playlists/37i9dQZF1DX8mBRYewE6or/tracks'
+                            total: 62
+                          type: playlist
+                          uri: 'spotify:playlist:37i9dQZF1DX8mBRYewE6or'
+                        - collaborative: false
+                          description: 'O batidão dos funks mais bombados pra agitar a pista do seu baile! [Conteúdo explícito]'
+                          external_urls:
+                            spotify: 'https://open.spotify.com/playlist/37i9dQZF1DWWmaszSfZpom'
+                          href: 'https://api.spotify.com/v1/playlists/37i9dQZF1DWWmaszSfZpom'
+                          id: 37i9dQZF1DWWmaszSfZpom
+                          images:
+                            - height: 300
+                              url: 'https://pl.scdn.co/images/pl/default/68fae5be6747e445c6bb34655c2bc2a77b9d1439'
+                              width: 300
+                          name: Segue o Baile
+                          owner:
+                            display_name: Spotify
+                            external_urls:
+                              spotify: 'https://open.spotify.com/user/spotify'
+                            href: 'https://api.spotify.com/v1/users/spotify'
+                            id: spotify
+                            type: user
+                            uri: 'spotify:user:spotify'
+                          primary_color: null
+                          public: null
+                          snapshot_id: MTU3MzEyOTM2OCwwMDAwMDA5MDAwMDAwMTZlNDVkMTM0MmMwMDAwMDE2ZGNjMTY1NTFh
+                          tracks:
+                            href: 'https://api.spotify.com/v1/playlists/37i9dQZF1DWWmaszSfZpom/tracks'
+                            total: 67
+                          type: playlist
+                          uri: 'spotify:playlist:37i9dQZF1DWWmaszSfZpom'
+                      limit: 2
+                      next: 'https://api.spotify.com/v1/browse/categories/party/playlists?country=BR&offset=2&limit=2'
+                      offset: 0
+                      previous: null
+                      total: 37
+      operationId: get-categorys-playlists
+      description: Get a list of Spotify playlists tagged with a particular category.
+      parameters:
+        - $ref: '#/components/parameters/trait_country'
+        - $ref: '#/components/parameters/trait_paged_limit'
+        - $ref: '#/components/parameters/trait_paged_offset'
+  '/browse/categories/{category_id}':
+    parameters:
+      - schema:
+          type: string
+        name: category_id
+        in: path
+        required: true
+        description: The Spotify category ID for the category.
+    get:
+      summary: Get a Category
+      tags:
+        - browse
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/category'
+      operationId: get-category
+      description: 'Get a single category used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).'
+      parameters:
+        - $ref: '#/components/parameters/trait_country'
+        - $ref: '#/components/parameters/trait_locale'
+  /recommendations:
+    get:
+      summary: Get Recommendations
+      tags:
+        - browse
+      responses: {}
+      operationId: get-recommendations
+      description: |-
+        Recommendations are generated based on the available information for a given seed entity and matched against similar artists and tracks. If there is sufficient information about the provided seeds, a list of tracks will be returned together with pool size details.
+
+        For artists and tracks that are very new or obscure there might not be enough data to generate a list of tracks.
+      parameters:
+        - $ref: '#/components/parameters/trait_paged_limit'
+        - $ref: '#/components/parameters/trait_market'
         - schema:
-            type: integer
+            type: string
           in: query
-          name: limit
-          description: 'The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50. '
+          name: seed_artists
+          description: 'A comma separated list of Spotify IDs for seed artists. Up to 5 seed values may be provided in any combination of seed_artists, seed_tracks and seed_genres.'
+          required: true
         - schema:
-            type: integer
+            type: string
           in: query
-          description: 'The index of the first item to return. Default: 0 (the first object). Use with limit to get the next set of items. '
-          name: offset
+          required: true
+          name: seed_genres
+          description: 'A comma separated list of any genres in the set of available genre seeds. Up to 5 seed values may be provided in any combination of seed_artists, seed_tracks and seed_genres.'
+        - schema:
+            type: string
+          in: query
+          required: true
+          name: seed_tracks
+          description: 'A comma separated list of Spotify IDs for a seed track. Up to 5 seed values may be provided in any combination of seed_artists, seed_tracks and seed_genres.'
+        - schema:
+            type: string
+          in: query
+          name: ' min_acousticness'
+        - schema:
+            type: string
+          in: query
+          name: max_acousticness
+        - schema:
+            type: string
+          in: query
+          name: target_acousticness
+        - schema:
+            type: string
+          in: query
+          name: min_danceability
+        - schema:
+            type: string
+          in: query
+          name: max_danceability
+        - schema:
+            type: string
+          in: query
+          name: ' target_danceability'
+        - schema:
+            type: string
+          in: query
+          name: ' min_duration_ms'
+        - schema:
+            type: string
+          in: query
+          name: max_duration_ms
+        - schema:
+            type: string
+          in: query
+          name: target_duration_ms
+        - schema:
+            type: string
+          in: query
+          name: min_energy
+        - schema:
+            type: string
+          in: query
+          name: max_energy
+        - schema:
+            type: string
+          in: query
+          name: target_energy
+        - schema:
+            type: string
+          in: query
+          name: min_instrumentalness
 x-basePath: '/{version}'
 servers:
   - url: 'https://api.spotify.com/v1'
@@ -1470,7 +1783,7 @@ components:
     trait_paged_limit:
       name: limit
       in: query
-      description: The maximum number of items to return
+      description: 'The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.'
       required: false
       schema:
         type: integer
@@ -1480,11 +1793,33 @@ components:
     trait_paged_offset:
       name: offset
       in: query
-      description: The index of the first item to return
+      description: 'The index of the first item to return. Default: 0 (the first object). Use with limit to get the next set of items.'
       required: false
       schema:
         type: integer
         default: 0
+    trait_country:
+      name: country
+      in: query
+      required: false
+      schema:
+        type: string
+      description: 'A country: an ISO 3166-1 alpha-2 country code. Provide this parameter to ensure that the category exists for a particular country.'
+    trait_market:
+      name: market
+      in: query
+      required: false
+      schema:
+        type: string
+      description: The market you'd like to request. Synonym for country
+    trait_locale:
+      name: locale
+      in: query
+      required: false
+      schema:
+        type: string
+        pattern: '^[a-zA-Z]{2}\_[a-zA-Z]{2}'
+      description: 'The desired language, consisting of an ISO 639-1 language code and an ISO 3166-1 alpha-2 country code, joined by an underscore. For example: es_MX, meaning "Spanish (Mexico)". Provide this parameter if you want the category strings returned in a particular language. Note that, if locale is not supplied, or if the specified language is not available, the category strings returned will be in the Spotify default language (American English).'
   securitySchemes:
     refreshable-user-authentication:
       type: oauth2
@@ -2628,6 +2963,120 @@ components:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 
                 * NO_PREV_TRACK - The command requires a previous track, but there is none in the context.
                 * NO_NEXT_TRACK - The command requires a next track, but there is none in the context.
@@ -3150,7 +3599,61 @@ components:
           type: array
           description: The requested data.
           items:
-            $ref: '#/components/schemas/simplified-album'
+            $ref: '#/components/schemas/paging-simplified-album'
+        limit:
+          type: integer
+          description: The maximum number of items in the response (as set in the query or by default).
+        next:
+          type: string
+          description: URL to the next page of items. ( null if none)
+        offset:
+          type: integer
+          description: The offset of the items returned (as set in the query or by default)
+        previous:
+          type: string
+          description: URL to the previous page of items. ( null if none)
+        total:
+          type: integer
+          description: The total number of items available to return.
+    paging-simplified-playlist:
+      title: paging-simplified-playlist
+      type: object
+      properties:
+        href:
+          type: string
+          description: A link to the Web API endpoint returning the full result of the request
+        items:
+          type: array
+          description: The requested data.
+          items:
+            $ref: '#/components/schemas/simplified-playlist'
+        limit:
+          type: integer
+          description: The maximum number of items in the response (as set in the query or by default).
+        next:
+          type: string
+          description: URL to the next page of items. ( null if none)
+        offset:
+          type: integer
+          description: The offset of the items returned (as set in the query or by default)
+        previous:
+          type: string
+          description: URL to the previous page of items. ( null if none)
+        total:
+          type: integer
+          description: The total number of items available to return.
+    paging-categories:
+      title: paging-categories
+      type: object
+      properties:
+        href:
+          type: string
+          description: A link to the Web API endpoint returning the full result of the request
+        items:
+          type: array
+          description: The requested data.
+          items:
+            $ref: '#/components/schemas/category'
         limit:
           type: integer
           description: The maximum number of items in the response (as set in the query or by default).
