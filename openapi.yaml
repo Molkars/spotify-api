@@ -115,7 +115,7 @@ paths:
                           - text: '(P) 2013 Universal Island Records, a division of Universal Music Operations Limited'
                             type: P
                         external_ids:
-                          upc: '00602537518357'
+                          upc: 602537518357
                         external_urls:
                           spotify: 'https://open.spotify.com/album/41MnTivkwTO3UUJ8DrqEJJ'
                         genres: []
@@ -1096,6 +1096,133 @@ paths:
           in: query
           name: market
           description: An ISO 3166-1 alpha-2 country code or the string from_token. Synonym for country
+  '/artists/{id}/related-artists':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: The Spotify ID for the artist
+    get:
+      summary: Get an Artist's Related Artists
+      tags:
+        - artists
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artists:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/artist'
+              examples:
+                example-1:
+                  value:
+                    artists:
+                      - external_urls:
+                          spotify: 'https://open.spotify.com/artist/5ZKMPRDHc7qElVJFh3uRqB'
+                        followers:
+                          href: null
+                          total: 18108
+                        genres:
+                          - rockabilly
+                        href: 'https://api.spotify.com/v1/artists/5ZKMPRDHc7qElVJFh3uRqB'
+                        id: 5ZKMPRDHc7qElVJFh3uRqB
+                        images:
+                          - height: 997
+                            url: 'https://i.scdn.co/image/beff5827580bcc4d129cbc0872768095eeba8c14'
+                            width: 1000
+                          - height: 638
+                            url: 'https://i.scdn.co/image/dbabf703779789917c4dd1c0e54da62c7a45ce92'
+                            width: 640
+                          - height: 199
+                            url: 'https://i.scdn.co/image/74761c343bec27c814b8e44e4bc095cbf1b674bb'
+                            width: 200
+                          - height: 64
+                            url: 'https://i.scdn.co/image/0c30af5647c74fee14fb97981c23b336abbc9f21'
+                            width: 64
+                        name: Wanda Jackson
+                        popularity: 59
+                        type: artist
+                        uri: 'spotify:artist:5ZKMPRDHc7qElVJFh3uRqB'
+      operationId: get-artists-realted-artists
+      description: Get Spotify catalog information about artists similar to a given artist. Similarity is based on analysis of the Spotify community’s listening history.
+  '/artists/{id}/albums':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: The Spotify ID for the artist.
+    get:
+      summary: Get an Artist's Albums
+      tags:
+        - artists
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  href:
+                    type: string
+                    description: A link to the Web API endpoint returning the full result of the request
+                  items:
+                    type: array
+                    description: The requested data.
+                    items:
+                      $ref: '#/components/schemas/simplified-album'
+                  limit:
+                    type: integer
+                    description: The maximum number of items in the response (as set in the query or by default).
+                  next:
+                    type: string
+                    description: URL to the next page of items. ( null if none)
+                  offset:
+                    type: integer
+                    description: The offset of the items returned (as set in the query or by default)
+                  previous:
+                    type: string
+                    description: URL to the previous page of items. ( null if none)
+                  total:
+                    type: integer
+                    description: The total number of items available to return.
+      operationId: get-artists-albums
+      description: Get Spotify catalog information about an artist’s albums.
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - album
+              - single
+              - appears_on
+              - compilation
+          in: query
+          name: include_groups
+          description: 'A comma-separated list of keywords that will be used to filter the response. If not supplied, all album types will be returned. Valid values are:- album - single - appears_on - compilation For example: include_groups=album,single.'
+        - schema:
+            type: string
+          in: query
+          name: market
+          description: 'Synonym for country. An ISO 3166-1 alpha-2 country code or the string from_token. Supply this parameter to limit the response to one particular geographical market. For example, for albums available in Sweden: market=SE. If not given, results will be returned for all markets and you are likely to get duplicate results per album, one for each market in which the album is available!'
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: 'The number of album objects to return. Default: 20. Minimum: 1. Maximum: 50. For example: '
+        - schema:
+            type: integer
+          in: query
+          name: offset
+          description: 'The index of the first album to return. Default: 0 (i.e., the first album). Use with limit to get the next set of albums.'
 x-basePath: '/{version}'
 servers:
   - url: 'https://api.spotify.com/v1'
@@ -2034,6 +2161,34 @@ components:
             - PREMIUM_REQUIRED
             - UNKNOWN
           description: |2-
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
